@@ -59,16 +59,16 @@ function ImageQueue({ files, onRemove }: ImageQueueProps) {
               <div className="image-queue__info">
                 <h3>{imageFile.name}</h3>
 
-<p>
-  {getFileFormat(imageFile)} ·{' '}
-  {formatFileSize(imageFile.size)}
-  {imageFile.width > 0 && imageFile.height > 0 && (
-    <>
-      {' · '}
-      {imageFile.width} × {imageFile.height}
-    </>
-  )}
-</p>
+            <p>
+              {getFileFormat(imageFile)} ·{' '}
+              {formatFileSize(imageFile.size)}
+              {imageFile.width > 0 && imageFile.height > 0 && (
+                <>
+                  {' · '}
+                  {imageFile.width} × {imageFile.height}
+                </>
+              )}
+            </p>
               </div>
 
               <button
