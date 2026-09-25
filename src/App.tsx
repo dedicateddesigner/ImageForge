@@ -1,7 +1,7 @@
-import { convertToWebP } from './services/converter'
 import { useState } from 'react'
 import Header from './components/Header/Header'
 import Dropzone from './components/Dropzone/Dropzone'
+import { convertToWebP } from './services/converter'
 import {
   createImageFile,
   getImageDimensions,
@@ -10,38 +10,10 @@ import {
 import type { ImageFile } from './types/image'
 import ImageQueue from './components/ImageQueue/ImageQueue'
 
-
 function App() {
   const [selectedFiles, setSelectedFiles] = useState<ImageFile[]>([])
   const [duplicateCount, setDuplicateCount] = useState(0)
-
-    const [webpResult, setWebpResult] = useState<{
-    url: string
-    size: number
-  } | null>(null)
-
-  const handleWebPTest = async () => {
-  const firstImage = selectedFiles[0]
-
-  if (!firstImage) {
-    return
-  }
-
-  try {
-    const webpBlob = await convertToWebP(firstImage.file, {
-      quality: 80,
-    })
-
-    const url = URL.createObjectURL(webpBlob)
-
-    setWebpResult({
-      url,
-      size: webpBlob.size,
-    })
-  } catch (error) {
-    console.error('WebP conversion failed:', error)
-  }
-}
+  const [isConverting, setIsConverting] = useState(false)
 
   const handleFilesSelected = (newFiles: File[]) => {
     const existingRawFiles = selectedFiles.map((imageFile) => imageFile.file)
@@ -87,6 +59,36 @@ function App() {
     })
   }
 
+  const handleTestConversion = async () => {
+    if (selectedFiles.length === 0 || isConverting) {
+      return
+    }
+
+    try {
+      setIsConverting(true)
+
+      for (const imageFile of selectedFiles) {
+        const webpBlob = await convertToWebP(imageFile.file, 80)
+
+        const downloadUrl = URL.createObjectURL(webpBlob)
+        const link = document.createElement('a')
+
+        link.href = downloadUrl
+        link.download = imageFile.name.replace(/\.[^/.]+$/, '.webp')
+
+        document.body.appendChild(link)
+        link.click()
+        link.remove()
+
+        URL.revokeObjectURL(downloadUrl)
+      }
+    } catch (error) {
+      console.error('WebP conversion failed:', error)
+    } finally {
+      setIsConverting(false)
+    }
+  }
+
   return (
     <>
       <Header />
@@ -106,6 +108,18 @@ function App() {
         </section>
 
         <Dropzone onFilesSelected={handleFilesSelected} />
+
+        {selectedFiles.length > 0 && (
+          <section className="conversion-test">
+            <button
+              type="button"
+              onClick={handleTestConversion}
+              disabled={isConverting}
+            >
+              {isConverting ? 'Converting...' : 'Test WebP Conversion'}
+            </button>
+          </section>
+        )}
 
         <ImageQueue
           files={selectedFiles}
@@ -136,23 +150,6 @@ function App() {
                   {duplicateCount === 1 ? 'duplicate' : 'duplicates'} skipped
                 </>
               )}
-              <div>
-        <button type="button" onClick={handleWebPTest}>
-          Test WebP Conversion
-        </button>
-
-        {webpResult && (
-          <p>
-            WebP output: {(webpResult.size / 1024).toFixed(1)} KB{' '}
-            <a
-              href={webpResult.url}
-              download="imageforge-test.webp"
-            >
-              Download WebP
-            </a>
-          </p>
-        )}
-      </div>
             </div>
           </section>
         )}

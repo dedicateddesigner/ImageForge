@@ -1,7 +1,20 @@
-import { encode } from '@jsquash/webp'
+interface ConvertResponse {
+  id: string
+  success: boolean
+  buffer?: ArrayBuffer
+  error?: string
+}
 
-export interface WebPConversionOptions {
-  quality?: number
+function createWorker() {
+  return new Worker(
+    new URL(
+      '../workers/image-converter.worker.ts',
+      import.meta.url,
+    ),
+    {
+      type: 'module',
+    },
+  )
 }
 
 async function fileToImageData(file: File): Promise<ImageData> {
@@ -40,15 +53,54 @@ async function fileToImageData(file: File): Promise<ImageData> {
 
 export async function convertToWebP(
   file: File,
-  options: WebPConversionOptions = {},
-) {
+  quality = 80,
+): Promise<Blob> {
   const imageData = await fileToImageData(file)
+  const worker = createWorker()
 
-  const buffer = await encode(imageData, {
-    quality: options.quality ?? 80,
-  })
+  return new Promise((resolve, reject) => {
+    const id = crypto.randomUUID()
 
-  return new Blob([buffer], {
-    type: 'image/webp',
+    worker.onmessage = (
+      event: MessageEvent<ConvertResponse>,
+    ) => {
+      const response = event.data
+
+      worker.terminate()
+
+      if (!response.success || !response.buffer) {
+        reject(
+          new Error(
+            response.error ?? 'WebP conversion failed.',
+          ),
+        )
+
+        return
+      }
+
+      resolve(
+        new Blob([response.buffer], {
+          type: 'image/webp',
+        }),
+      )
+    }
+
+    worker.onerror = () => {
+      worker.terminate()
+      reject(new Error('WebP worker failed.'))
+    }
+
+    worker.postMessage(
+      {
+        id,
+        imageData: {
+          data: imageData.data.buffer,
+          width: imageData.width,
+          height: imageData.height,
+        },
+        quality,
+      },
+      [imageData.data.buffer],
+    )
   })
 }
