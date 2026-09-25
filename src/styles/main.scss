@@ -1,5 +1,5 @@
-@use "./variables" as *;
-@use "./reset";
+@use './variables' as *;
+@use './reset';
 
 body {
   background: $color-bg;
@@ -7,4 +7,51 @@ body {
   font-family: $font-family-base;
   font-weight: $font-regular;
   line-height: 1.5;
+}
+
+.app-intro {
+  padding: $space-7 0 0;
+
+  &__container {
+    width: min(100% - 2rem, $container-width);
+    margin-inline: auto;
+  }
+
+  &__eyebrow {
+    margin: 0 0 $space-2;
+
+    color: $color-text-muted;
+    font-size: $font-sm;
+    font-weight: $font-medium;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  h1 {
+    max-width: 700px;
+    margin: 0;
+
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+
+  p:last-child {
+    max-width: 620px;
+    margin: $space-4 0 0;
+
+    color: $color-text-muted;
+    font-size: $font-lg;
+  }
+}
+
+.file-summary {
+  padding-bottom: $space-7;
+
+  &__container {
+    width: min(100% - 2rem, $container-width);
+    margin-inline: auto;
+
+    color: $color-text-muted;
+  }
 }

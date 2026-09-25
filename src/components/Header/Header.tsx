@@ -7,14 +7,10 @@ function Header() {
         <a href="/" className="site-header__brand">
           <span className="site-header__logo">IF</span>
 
-          <span className="site-header__name">
-            ImageForge
-          </span>
+          <span className="site-header__name">ImageForge</span>
         </a>
 
-        <div className="site-header__tagline">
-          Bulk Image Converter
-        </div>
+        <div className="site-header__tagline">Bulk Image Converter</div>
       </div>
     </header>
   )

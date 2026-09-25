@@ -1,0 +1,112 @@
+@use '../../styles/variables' as *;
+
+.dropzone-section {
+  width: min(100% - 2rem, $container-width);
+  margin: $space-7 auto $space-6;
+}
+
+.dropzone {
+  position: relative;
+
+  min-height: 320px;
+
+  display: grid;
+  place-items: center;
+
+  border: 2px dashed $color-border-dark;
+  border-radius: $radius-xl;
+
+  background: $color-surface;
+
+  transition:
+    border-color $transition-normal,
+    background-color $transition-normal,
+    transform $transition-normal;
+
+  &--dragging {
+    border-color: $color-accent;
+    background: $color-surface-muted;
+    transform: scale(1.01);
+  }
+
+  &__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &__content {
+    padding: $space-6;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-align: center;
+  }
+
+  &__icon {
+    width: 56px;
+    height: 56px;
+
+    display: grid;
+    place-items: center;
+
+    margin-bottom: $space-4;
+
+    border-radius: 50%;
+    background: $color-surface-muted;
+
+    font-size: $font-xl;
+    font-weight: $font-semibold;
+  }
+
+  &__title {
+    margin: 0;
+
+    font-size: $font-xl;
+    font-weight: $font-semibold;
+    letter-spacing: -0.02em;
+  }
+
+  &__description {
+    margin: $space-2 0 $space-5;
+
+    color: $color-text-muted;
+    font-size: $font-sm;
+  }
+
+  &__button {
+    border: 0;
+    border-radius: $radius-md;
+
+    padding: 0.75rem 1.25rem;
+
+    background: $color-accent;
+    color: $color-surface;
+
+    font-weight: $font-semibold;
+
+    transition:
+      background-color $transition-fast,
+      transform $transition-fast;
+
+    &:hover {
+      background: $color-accent-hover;
+    }
+
+    &:active {
+      transform: translateY(1px);
+    }
+  }
+
+  &__count {
+    margin: $space-4 0 0;
+
+    color: $color-success;
+    font-size: $font-sm;
+    font-weight: $font-medium;
+  }
+}
