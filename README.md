@@ -1,75 +1,67 @@
-# React + TypeScript + Vite
+# ImageForge
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A fast, privacy-focused bulk image converter for WebP and AVIF.
 
-Currently, two official plugins are available:
+ImageForge converts images locally on your computer/browser, so your images do not need to be uploaded to a remote server.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+### Current
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Local image processing
+- Drag & drop image upload
+- Multiple image selection
+- WebP conversion
+- AVIF conversion
+- Adjustable image quality
+- Bulk image conversion
 
-## Expanding the ESLint configuration
+### Planned
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Image resize
+- Metadata removal
+- Before/after comparison
+- File size comparison
+- Target file size optimization
+- ZIP download for converted images
+- Folder processing
+- Conversion presets
+- Windows application
+- macOS application
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Why ImageForge?
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Most online image converters require you to upload your images to a server.
 
-```
+ImageForge is designed around local processing.
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Your workflow is:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1. Select your images.
+2. Choose the output format.
+3. Adjust the conversion settings.
+4. Convert the images.
+5. Download the converted files.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+The images are processed locally whenever supported by the application.
 
-```
+---
+
+# Getting Started
+
+## Requirements
+
+Make sure you have the following installed:
+
+- Node.js
+- npm
+- Git
+
+You can check your installed versions with:
+
+```bash
+node --version
+npm --version
+git --version
