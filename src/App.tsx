@@ -10,11 +10,13 @@ import {
 } from './services/file-utils'
 import type { ImageFile } from './types/image'
 import ImageQueue from './components/ImageQueue/ImageQueue'
+import { createWebPZip } from './services/zip'
 
 function App() {
   const [selectedFiles, setSelectedFiles] = useState<ImageFile[]>([])
   const [duplicateCount, setDuplicateCount] = useState(0)
   const [isConverting, setIsConverting] = useState(false)
+  const [isCreatingZip, setIsCreatingZip] = useState(false)
 
   const handleFilesSelected = (newFiles: File[]) => {
     const existingRawFiles = selectedFiles.map((imageFile) => imageFile.file)
@@ -118,6 +120,38 @@ function App() {
     setIsConverting(false)
   }
 
+  const handleDownloadAll = async () => {
+    const completedFiles = selectedFiles.filter(
+      (file) => file.conversionStatus === 'completed',
+    )
+
+    if (completedFiles.length === 0 || isCreatingZip) {
+      return
+    }
+
+    try {
+      setIsCreatingZip(true)
+
+      const zipBlob = await createWebPZip(completedFiles)
+      const downloadUrl = URL.createObjectURL(zipBlob)
+
+      const link = document.createElement('a')
+
+      link.href = downloadUrl
+      link.download = 'imageforge-webp.zip'
+
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+
+      URL.revokeObjectURL(downloadUrl)
+    } catch (error) {
+      console.error('ZIP creation failed:', error)
+    } finally {
+      setIsCreatingZip(false)
+    }
+  }
+
   return (
     <>
       <Header />
@@ -180,6 +214,19 @@ function App() {
                   <strong>{duplicateCount}</strong>{' '}
                   {duplicateCount === 1 ? 'duplicate' : 'duplicates'} skipped
                 </>
+              )}
+              {selectedFiles.some(
+                (file) => file.conversionStatus === 'completed',
+              ) && (
+                <section className="download-all">
+                  <button
+                    type="button"
+                    onClick={handleDownloadAll}
+                    disabled={isCreatingZip}
+                  >
+                    {isCreatingZip ? 'Creating ZIP...' : 'Download All as ZIP'}
+                  </button>
+                </section>
               )}
             </div>
           </section>
