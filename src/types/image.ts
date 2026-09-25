@@ -7,4 +7,6 @@ export interface ImageFile {
   lastModified: number
   fingerprint: string
   previewUrl: string
+  width: number
+  height: number
 }

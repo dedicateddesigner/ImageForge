@@ -1,7 +1,11 @@
 import { useState } from 'react'
 import Header from './components/Header/Header'
 import Dropzone from './components/Dropzone/Dropzone'
-import { createImageFile, isDuplicateFile } from './services/file-utils'
+import {
+  createImageFile,
+  getImageDimensions,
+  isDuplicateFile,
+} from './services/file-utils'
 import type { ImageFile } from './types/image'
 import ImageQueue from './components/ImageQueue/ImageQueue'
 
@@ -30,12 +34,32 @@ function App() {
 
     setDuplicateCount(duplicates)
 
-    const newImageFiles = uniqueFiles.map(createImageFile)
+const newImageFiles = uniqueFiles.map(createImageFile)
 
-    setSelectedFiles((currentFiles) => [
-      ...currentFiles,
-      ...newImageFiles,
-    ])
+setSelectedFiles((currentFiles) => [
+  ...currentFiles,
+  ...newImageFiles,
+])
+
+newImageFiles.forEach(async (imageFile) => {
+  try {
+    const dimensions = await getImageDimensions(imageFile.file)
+
+    setSelectedFiles((currentFiles) =>
+      currentFiles.map((currentFile) =>
+        currentFile.id === imageFile.id
+          ? {
+              ...currentFile,
+              width: dimensions.width,
+              height: dimensions.height,
+            }
+          : currentFile,
+      ),
+    )
+  } catch {
+    // Keep the image in the queue even if dimensions cannot be read.
+  }
+})
   }
 
   return (

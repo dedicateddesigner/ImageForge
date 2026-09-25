@@ -30,5 +30,32 @@ export function createImageFile(file: File): ImageFile {
     lastModified: file.lastModified,
     fingerprint: createFileFingerprint(file),
     previewUrl: URL.createObjectURL(file),
+    width: 0,
+    height: 0,
   }
+}
+
+export function getImageDimensions(
+  file: File,
+): Promise<{ width: number; height: number }> {
+  return new Promise((resolve, reject) => {
+    const image = new Image()
+    const previewUrl = URL.createObjectURL(file)
+
+    image.onload = () => {
+      resolve({
+        width: image.naturalWidth,
+        height: image.naturalHeight,
+      })
+
+      URL.revokeObjectURL(previewUrl)
+    }
+
+    image.onerror = () => {
+      URL.revokeObjectURL(previewUrl)
+      reject(new Error(`Unable to read image dimensions: ${file.name}`))
+    }
+
+    image.src = previewUrl
+  })
 }
