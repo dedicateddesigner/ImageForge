@@ -122,3 +122,52 @@
         }
     }
 }
+
+.image-queue__status {
+    display: inline-block;
+    margin-top: $space-2;
+    color: $color-text-muted;
+    font-size: $font-sm;
+}
+
+.image-queue__result {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    margin-top: $space-2;
+    font-size: $font-sm;
+    color: $color-text-muted;
+
+    strong {
+        color: $color-success;
+        font-weight: $font-medium;
+    }
+}
+
+.image-queue__error {
+    display: inline-block;
+    margin-top: $space-2;
+    color: $color-error;
+    font-size: $font-sm;
+}
+
+.image-queue__actions {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+}
+
+.image-queue__download {
+    padding: $space-2 $space-3;
+    border: 1px solid $color-border-dark;
+    border-radius: $radius-sm;
+    background: $color-surface;
+    color: $color-text;
+    font-size: $font-sm;
+    font-weight: $font-medium;
+    transition: background-color $transition-fast;
+
+    &:hover {
+        background: $color-surface-muted;
+    }
+}

@@ -64,29 +64,57 @@ function App() {
       return
     }
 
-    try {
-      setIsConverting(true)
+    setIsConverting(true)
 
-      for (const imageFile of selectedFiles) {
+    for (const imageFile of selectedFiles) {
+      setSelectedFiles((currentFiles) =>
+        currentFiles.map((currentFile) =>
+          currentFile.id === imageFile.id
+            ? {
+                ...currentFile,
+                conversionStatus: 'converting',
+                conversionError: '',
+              }
+            : currentFile,
+        ),
+      )
+
+      try {
         const webpBlob = await convertToWebP(imageFile.file, 80)
 
-        const downloadUrl = URL.createObjectURL(webpBlob)
-        const link = document.createElement('a')
+        const convertedUrl = URL.createObjectURL(webpBlob)
 
-        link.href = downloadUrl
-        link.download = imageFile.name.replace(/\.[^/.]+$/, '.webp')
-
-        document.body.appendChild(link)
-        link.click()
-        link.remove()
-
-        URL.revokeObjectURL(downloadUrl)
+        setSelectedFiles((currentFiles) =>
+          currentFiles.map((currentFile) =>
+            currentFile.id === imageFile.id
+              ? {
+                  ...currentFile,
+                  conversionStatus: 'completed',
+                  convertedSize: webpBlob.size,
+                  convertedUrl,
+                }
+              : currentFile,
+          ),
+        )
+      } catch (error) {
+        setSelectedFiles((currentFiles) =>
+          currentFiles.map((currentFile) =>
+            currentFile.id === imageFile.id
+              ? {
+                  ...currentFile,
+                  conversionStatus: 'error',
+                  conversionError:
+                    error instanceof Error
+                      ? error.message
+                      : 'Conversion failed.',
+                }
+              : currentFile,
+          ),
+        )
       }
-    } catch (error) {
-      console.error('WebP conversion failed:', error)
-    } finally {
-      setIsConverting(false)
     }
+
+    setIsConverting(false)
   }
 
   return (
@@ -116,7 +144,7 @@ function App() {
               onClick={handleTestConversion}
               disabled={isConverting}
             >
-              {isConverting ? 'Converting...' : 'Test WebP Conversion'}
+              {isConverting ? 'Converting...' : 'Convert All to WebP'}
             </button>
           </section>
         )}

@@ -1,22 +1,14 @@
 import type { ImageFile } from '../types/image'
 
 export function createFileFingerprint(file: File) {
-  return [
-    file.name.toLowerCase(),
-    file.size,
-    file.lastModified,
-  ].join('|')
+  return [file.name.toLowerCase(), file.size, file.lastModified].join('|')
 }
 
-export function isDuplicateFile(
-  file: File,
-  existingFiles: File[],
-) {
+export function isDuplicateFile(file: File, existingFiles: File[]) {
   const fingerprint = createFileFingerprint(file)
 
   return existingFiles.some(
-    (existingFile) =>
-      createFileFingerprint(existingFile) === fingerprint,
+    (existingFile) => createFileFingerprint(existingFile) === fingerprint,
   )
 }
 
@@ -32,6 +24,10 @@ export function createImageFile(file: File): ImageFile {
     previewUrl: URL.createObjectURL(file),
     width: 0,
     height: 0,
+    conversionStatus: 'ready',
+    convertedSize: 0,
+    convertedUrl: '',
+    conversionError: '',
   }
 }
 
