@@ -1,9 +1,15 @@
+import Header from './components/Header/Header'
+
 function App() {
   return (
-    <main>
-      <h1>ImageForge</h1>
-      <p>Bulk image converter for WebP and AVIF.</p>
-    </main>
+    <>
+      <Header />
+
+      <main>
+        <h1>ImageForge</h1>
+        <p>Bulk image converter for WebP and AVIF.</p>
+      </main>
+    </>
   )
 }
 

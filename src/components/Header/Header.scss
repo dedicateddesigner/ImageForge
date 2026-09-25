@@ -1,0 +1,53 @@
+@use "../../styles/variables" as *;
+
+.site-header {
+  width: 100%;
+  border-bottom: 1px solid $color-border;
+  background: $color-surface;
+
+  &__container {
+    width: min(100% - 2rem, $container-width);
+    min-height: 72px;
+    margin-inline: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-4;
+  }
+
+  &__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-3;
+
+    color: $color-text;
+  }
+
+  &__logo {
+    display: grid;
+    width: 36px;
+    height: 36px;
+
+    place-items: center;
+
+    border-radius: $radius-sm;
+    background: $color-accent;
+    color: $color-surface;
+
+    font-size: $font-sm;
+    font-weight: $font-bold;
+    letter-spacing: -0.02em;
+  }
+
+  &__name {
+    font-size: $font-lg;
+    font-weight: $font-semibold;
+    letter-spacing: -0.02em;
+  }
+
+  &__tagline {
+    color: $color-text-muted;
+    font-size: $font-sm;
+  }
+}
