@@ -1,0 +1,70 @@
+@use '../../styles/variables' as *;
+
+.conversion-summary {
+    padding: 0 0 $space-7;
+
+    &__container {
+        width: min(100% - 2rem, $container-width);
+        margin-inline: auto;
+        padding: $space-5;
+        border: 1px solid $color-border;
+        border-radius: $radius-md;
+        background: $color-surface;
+    }
+
+    &__header {
+        margin-bottom: $space-5;
+    }
+
+    &__eyebrow {
+        margin: 0 0 $space-2;
+        color: $color-text-muted;
+        font-size: $font-sm;
+        font-weight: $font-medium;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    h2 {
+        margin: 0;
+        font-size: $font-xl;
+        line-height: 1.2;
+    }
+
+    &__stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: $space-4;
+    }
+
+    &__stat {
+        padding: $space-4;
+        border-radius: $radius-sm;
+        background: $color-surface-muted;
+
+        span {
+            display: block;
+            margin-bottom: $space-2;
+            color: $color-text-muted;
+            font-size: $font-sm;
+        }
+
+        strong {
+            display: block;
+            font-size: $font-lg;
+            font-weight: $font-medium;
+        }
+    }
+
+    @media (max-width: 800px) {
+        &__stats {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 500px) {
+        &__stats {
+            grid-template-columns: 1fr;
+        }
+    }
+}

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Header from './components/Header/Header'
 import Dropzone from './components/Dropzone/Dropzone'
+import ConversionSummary from './components/ConversionSummary/ConversionSummary'
 import { convertToWebP } from './services/converter'
 import {
   createImageFile,
@@ -165,6 +166,8 @@ function App() {
             })
           }}
         />
+
+        <ConversionSummary files={selectedFiles} />
 
         {selectedFiles.length > 0 && (
           <section className="file-summary">
