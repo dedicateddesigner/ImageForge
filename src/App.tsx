@@ -1,15 +1,20 @@
 import { useState } from 'react'
 import Header from './components/Header/Header'
 import Dropzone from './components/Dropzone/Dropzone'
-import { isDuplicateFile } from './services/file-utils'
+import { createImageFile, isDuplicateFile } from './services/file-utils'
+import type { ImageFile } from './types/image'
+import ImageQueue from './components/ImageQueue/ImageQueue'
 
 function App() {
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
+  const [selectedFiles, setSelectedFiles] = useState<ImageFile[]>([])
   const [duplicateCount, setDuplicateCount] = useState(0)
 
   const handleFilesSelected = (newFiles: File[]) => {
+    const existingRawFiles = selectedFiles.map(
+      (imageFile) => imageFile.file,
+    )
 
-    const filesToCheck = [...selectedFiles]
+    const filesToCheck = [...existingRawFiles]
 
     const uniqueFiles = newFiles.filter((newFile) => {
       const isDuplicate = isDuplicateFile(newFile, filesToCheck)
@@ -25,9 +30,11 @@ function App() {
 
     setDuplicateCount(duplicates)
 
+    const newImageFiles = uniqueFiles.map(createImageFile)
+
     setSelectedFiles((currentFiles) => [
       ...currentFiles,
-      ...uniqueFiles,
+      ...newImageFiles,
     ])
   }
 
@@ -52,6 +59,26 @@ function App() {
         </section>
 
         <Dropzone onFilesSelected={handleFilesSelected} />
+
+<ImageQueue
+  files={selectedFiles}
+onRemove={(id) => {
+  setSelectedFiles((currentFiles) => {
+    const imageToRemove = currentFiles.find(
+      (imageFile) => imageFile.id === id,
+    )
+
+    if (imageToRemove) {
+      URL.revokeObjectURL(imageToRemove.previewUrl)
+    }
+
+    return currentFiles.filter(
+      (imageFile) => imageFile.id !== id,
+    )
+  })
+}}
+/>
+
 
         {selectedFiles.length > 0 && (
           <section className="file-summary">

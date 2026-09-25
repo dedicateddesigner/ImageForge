@@ -1,0 +1,124 @@
+@use "../../styles/variables" as *;
+
+.image-queue {
+    padding: 0 0 $space-7;
+
+    &__container {
+        width: min(100% - 2rem, $container-width);
+        margin-inline: auto;
+    }
+
+    &__header {
+        margin-bottom: $space-4;
+    }
+
+    &__eyebrow {
+        margin: 0 0 $space-1;
+        color: $color-text-muted;
+        font-size: $font-sm;
+        font-weight: $font-medium;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    h2 {
+        margin: 0;
+        font-size: $font-xl;
+        font-weight: $font-semibold;
+    }
+
+    &__list {
+        display: grid;
+        gap: $space-3;
+    }
+
+    &__item {
+        display: grid;
+        grid-template-columns: 80px minmax(0, 1fr) auto;
+        align-items: center;
+        gap: $space-4;
+
+        padding: $space-3;
+
+        border: 1px solid $color-border;
+        border-radius: $radius-lg;
+        background: $color-surface;
+    }
+
+    &__preview {
+        width: 80px;
+        height: 80px;
+
+        overflow: hidden;
+
+        border-radius: $radius-md;
+        background: $color-surface-muted;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    &__info {
+        min-width: 0;
+
+        h3 {
+            margin: 0;
+
+            overflow: hidden;
+
+            color: $color-text;
+            font-size: $font-md;
+            font-weight: $font-semibold;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        p {
+            margin: $space-1 0 0;
+
+            color: $color-text-muted;
+            font-size: $font-sm;
+        }
+    }
+
+    &__remove {
+        border: 1px solid $color-border;
+        border-radius: $radius-md;
+
+        padding: 0.6rem 0.9rem;
+
+        background: transparent;
+        color: $color-text-muted;
+
+        font-size: $font-sm;
+
+        transition:
+            background-color $transition-fast,
+            color $transition-fast,
+            border-color $transition-fast;
+
+        &:hover {
+            border-color: $color-error;
+            color: $color-error;
+        }
+    }
+
+    @media (max-width: 600px) {
+        &__item {
+            grid-template-columns: 64px minmax(0, 1fr);
+        }
+
+        &__preview {
+            width: 64px;
+            height: 64px;
+        }
+
+        &__remove {
+            grid-column: 2;
+            justify-self: start;
+        }
+    }
+}
