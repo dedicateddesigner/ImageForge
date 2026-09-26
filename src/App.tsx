@@ -4,6 +4,7 @@ import Header from './components/Header/Header'
 import Dropzone from './components/Dropzone/Dropzone'
 import ImageQueue from './components/ImageQueue/ImageQueue'
 import ConversionControls from './components/ConversionControls/ConversionControls'
+import ConversionSummary from './components/ConversionSummary/ConversionSummary'
 
 import { convertImage } from './services/converter'
 
@@ -289,11 +290,17 @@ function App() {
           </div>
 
           {selectedFiles.length > 0 ? (
-            <ImageQueue
-              files={selectedFiles}
-              format={settings.format}
-              onRemove={handleRemove}
-            />
+            <>
+              {completedCount > 0 && (
+                <ConversionSummary files={selectedFiles} />
+              )}
+
+              <ImageQueue
+                files={selectedFiles}
+                format={settings.format}
+                onRemove={handleRemove}
+              />
+            </>
           ) : (
             <div className="app-workspace__empty">
               <p>Add images to start converting.</p>
