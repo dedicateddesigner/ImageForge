@@ -1,7 +1,11 @@
 import JSZip from 'jszip'
-import type { ImageFile } from '../types/image'
 
-export async function createWebPZip(files: ImageFile[]): Promise<Blob> {
+import type { ImageFile, OutputFormat } from '../types/image'
+
+export async function createConversionZip(
+  files: ImageFile[],
+  format: OutputFormat,
+): Promise<Blob> {
   const zip = new JSZip()
 
   const completedFiles = files.filter(
@@ -17,7 +21,7 @@ export async function createWebPZip(files: ImageFile[]): Promise<Blob> {
 
     const blob = await response.blob()
 
-    const filename = imageFile.name.replace(/\.[^/.]+$/, '.webp')
+    const filename = imageFile.name.replace(/\.[^/.]+$/, `.${format}`)
 
     zip.file(filename, blob)
   }

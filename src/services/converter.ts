@@ -1,10 +1,6 @@
-import {
-  calculateResizeDimensions,
-} from './resize'
+import { calculateResizeDimensions } from './resize'
 
-import type {
-  ResizeSettings,
-} from '../types/image'
+import type { OutputFormat, ResizeSettings } from '../types/image'
 
 interface ConvertResponse {
   id: string
@@ -15,10 +11,7 @@ interface ConvertResponse {
 
 function createWorker() {
   return new Worker(
-    new URL(
-      '../workers/image-converter.worker.ts',
-      import.meta.url,
-    ),
+    new URL('../workers/image-converter.worker.ts', import.meta.url),
     {
       type: 'module',
     },
@@ -55,44 +48,28 @@ async function fileToImageData(
       throw new Error('Unable to create canvas context.')
     }
 
-    context.drawImage(
-      image,
-      0,
-      0,
-      dimensions.width,
-      dimensions.height,
-    )
+    context.drawImage(image, 0, 0, dimensions.width, dimensions.height)
 
-    return context.getImageData(
-      0,
-      0,
-      dimensions.width,
-      dimensions.height,
-    )
-
+    return context.getImageData(0, 0, dimensions.width, dimensions.height)
   } finally {
     URL.revokeObjectURL(imageUrl)
   }
 }
 
-export async function convertToWebP(
+export async function convertImage(
   file: File,
-  quality = 80,
+  format: OutputFormat,
+  quality: number,
   resizeSettings: ResizeSettings,
 ): Promise<Blob> {
-  const imageData = await fileToImageData(
-    file,
-    resizeSettings,
-  )
+  const imageData = await fileToImageData(file, resizeSettings)
 
   const worker = createWorker()
 
   return new Promise((resolve, reject) => {
     const id = crypto.randomUUID()
 
-    worker.onmessage = (
-      event: MessageEvent<ConvertResponse>,
-    ) => {
+    worker.onmessage = (event: MessageEvent<ConvertResponse>) => {
       const response = event.data
 
       worker.terminate()
@@ -100,16 +77,18 @@ export async function convertToWebP(
       if (!response.success || !response.buffer) {
         reject(
           new Error(
-            response.error ?? 'WebP conversion failed.',
+            response.error ?? `${format.toUpperCase()} conversion failed.`,
           ),
         )
 
         return
       }
 
+      const mimeType = format === 'webp' ? 'image/webp' : 'image/avif'
+
       resolve(
         new Blob([response.buffer], {
-          type: 'image/webp',
+          type: mimeType,
         }),
       )
     }
@@ -117,14 +96,13 @@ export async function convertToWebP(
     worker.onerror = () => {
       worker.terminate()
 
-      reject(
-        new Error('WebP worker failed.'),
-      )
+      reject(new Error(`${format.toUpperCase()} worker failed.`))
     }
 
     worker.postMessage(
       {
         id,
+        format,
         imageData: {
           data: imageData.data.buffer,
           width: imageData.width,

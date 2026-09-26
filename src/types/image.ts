@@ -19,7 +19,7 @@ export interface ImageFile {
   conversionError: string
 }
 
-export type OutputFormat = 'webp'
+export type OutputFormat = 'webp' | 'avif'
 
 export interface ConversionSettings {
   format: OutputFormat
@@ -27,11 +27,7 @@ export interface ConversionSettings {
   resize: ResizeSettings
 }
 
-
-export type ResizeMode =
-  | 'percentage'
-  | 'width'
-  | 'height'
+export type ResizeMode = 'percentage' | 'width' | 'height'
 
 export interface ResizeSettings {
   enabled: boolean

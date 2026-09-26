@@ -1,189 +1,296 @@
-import type { ConversionSettings, ResizeMode } from '../../types/image'
-import './ConversionControls.scss'
+import type { ChangeEvent, Dispatch, SetStateAction } from 'react'
+
+import type {
+  ConversionSettings,
+  OutputFormat,
+  ResizeMode,
+} from '../../types/image'
 
 interface ConversionControlsProps {
   settings: ConversionSettings
-  setSettings: (settings: ConversionSettings) => void
+  setSettings: Dispatch<SetStateAction<ConversionSettings>>
 }
 
 function ConversionControls({
   settings,
   setSettings,
 }: ConversionControlsProps) {
-  const updateResize = (
-    changes: Partial<ConversionSettings['resize']>,
-  ) => {
-    setSettings({
-      ...settings,
+  const handleFormatChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const format = event.target.value as OutputFormat
+
+    setSettings((currentSettings) => ({
+      ...currentSettings,
+      format,
+    }))
+  }
+
+  const handleResizeToggle = () => {
+    setSettings((currentSettings) => ({
+      ...currentSettings,
       resize: {
-        ...settings.resize,
-        ...changes,
+        ...currentSettings.resize,
+        enabled: !currentSettings.resize.enabled,
       },
-    })
+    }))
+  }
+
+  const handleResizeModeChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const mode = event.target.value as ResizeMode
+
+    setSettings((currentSettings) => ({
+      ...currentSettings,
+      resize: {
+        ...currentSettings.resize,
+        mode,
+      },
+    }))
+  }
+
+  const handlePercentageChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const percentage = Number(event.target.value)
+
+    setSettings((currentSettings) => ({
+      ...currentSettings,
+      resize: {
+        ...currentSettings.resize,
+        percentage,
+      },
+    }))
+  }
+
+  const handleWidthChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const width = Number(event.target.value)
+
+    setSettings((currentSettings) => ({
+      ...currentSettings,
+      resize: {
+        ...currentSettings.resize,
+        width,
+      },
+    }))
+  }
+
+  const handleHeightChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const height = Number(event.target.value)
+
+    setSettings((currentSettings) => ({
+      ...currentSettings,
+      resize: {
+        ...currentSettings.resize,
+        height,
+      },
+    }))
+  }
+
+  const handleAspectRatioChange = () => {
+    setSettings((currentSettings) => ({
+      ...currentSettings,
+      resize: {
+        ...currentSettings.resize,
+        maintainAspectRatio: !currentSettings.resize.maintainAspectRatio,
+      },
+    }))
+  }
+
+  const handleQualityChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const quality = Number(event.target.value)
+
+    setSettings((currentSettings) => ({
+      ...currentSettings,
+      quality,
+    }))
   }
 
   return (
     <section className="conversion-controls">
-      <div className="conversion-controls__title">
-        <span>Conversion</span>
-        <strong>Settings</strong>
+      <div className="conversion-controls__header">
+        <div>
+          <p className="conversion-controls__eyebrow">Output settings</p>
+
+          <h2>Conversion</h2>
+        </div>
       </div>
 
-      <div className="conversion-controls__field">
-        <label htmlFor="output-format">Format</label>
+      <div className="conversion-controls__group">
+        <label className="conversion-controls__label" htmlFor="output-format">
+          Format
+        </label>
+
         <select
           id="output-format"
+          className="conversion-controls__select"
           value={settings.format}
-          disabled
-          aria-label="Output format"
+          onChange={handleFormatChange}
         >
           <option value="webp">WebP</option>
+
+          <option value="avif">AVIF</option>
         </select>
       </div>
 
       <div className="conversion-controls__divider" />
 
-      <div className="conversion-controls__resize-heading">
-        <div>
-          <strong>Resize</strong>
-          <span>Change dimensions before conversion.</span>
-        </div>
+      <div className="conversion-controls__section">
+        <div className="conversion-controls__section-header">
+          <div>
+            <h3>Resize</h3>
 
-        <label className="conversion-controls__switch">
-          <input
-            type="checkbox"
-            checked={settings.resize.enabled}
-            onChange={(event) => {
-              updateResize({ enabled: event.target.checked })
-            }}
-          />
-          <span />
-        </label>
-      </div>
-
-      {settings.resize.enabled && (
-        <div className="conversion-controls__resize">
-          <div className="conversion-controls__field">
-            <label htmlFor="resize-mode">Mode</label>
-            <select
-              id="resize-mode"
-              value={settings.resize.mode}
-              onChange={(event) => {
-                updateResize({
-                  mode: event.target.value as ResizeMode,
-                })
-              }}
-            >
-              <option value="percentage">Percentage</option>
-              <option value="width">Width</option>
-              <option value="height">Height</option>
-            </select>
+            <p>Change the output dimensions before conversion.</p>
           </div>
 
-          {settings.resize.mode === 'percentage' && (
-            <div className="conversion-controls__field">
-              <label htmlFor="resize-percentage">Scale</label>
-              <div className="conversion-controls__input">
-                <input
-                  id="resize-percentage"
-                  type="number"
-                  min="1"
-                  max="400"
-                  value={settings.resize.percentage}
-                  onChange={(event) => {
-                    updateResize({
-                      percentage: Number(event.target.value),
-                    })
-                  }}
-                />
-                <span>%</span>
-              </div>
-            </div>
-          )}
-
-          {settings.resize.mode === 'width' && (
-            <div className="conversion-controls__field">
-              <label htmlFor="resize-width">Width</label>
-              <div className="conversion-controls__input">
-                <input
-                  id="resize-width"
-                  type="number"
-                  min="1"
-                  value={settings.resize.width}
-                  onChange={(event) => {
-                    updateResize({
-                      width: Number(event.target.value),
-                    })
-                  }}
-                />
-                <span>px</span>
-              </div>
-            </div>
-          )}
-
-          {settings.resize.mode === 'height' && (
-            <div className="conversion-controls__field">
-              <label htmlFor="resize-height">Height</label>
-              <div className="conversion-controls__input">
-                <input
-                  id="resize-height"
-                  type="number"
-                  min="1"
-                  value={settings.resize.height}
-                  onChange={(event) => {
-                    updateResize({
-                      height: Number(event.target.value),
-                    })
-                  }}
-                />
-                <span>px</span>
-              </div>
-            </div>
-          )}
-
-          <label className="conversion-controls__aspect">
+          <label className="conversion-controls__switch">
             <input
               type="checkbox"
-              checked={settings.resize.maintainAspectRatio}
-              onChange={(event) => {
-                updateResize({
-                  maintainAspectRatio: event.target.checked,
-                })
-              }}
+              checked={settings.resize.enabled}
+              onChange={handleResizeToggle}
             />
-            <span>Maintain aspect ratio</span>
+
+            <span />
           </label>
         </div>
-      )}
+
+        {settings.resize.enabled && (
+          <div className="conversion-controls__resize">
+            <div className="conversion-controls__field">
+              <label
+                htmlFor="resize-mode"
+                className="conversion-controls__label"
+              >
+                Resize mode
+              </label>
+
+              <select
+                id="resize-mode"
+                className="conversion-controls__select"
+                value={settings.resize.mode}
+                onChange={handleResizeModeChange}
+              >
+                <option value="percentage">Percentage</option>
+
+                <option value="width">Width</option>
+
+                <option value="height">Height</option>
+              </select>
+            </div>
+
+            {settings.resize.mode === 'percentage' && (
+              <div className="conversion-controls__field">
+                <label
+                  htmlFor="resize-percentage"
+                  className="conversion-controls__label"
+                >
+                  Scale
+                </label>
+
+                <div className="conversion-controls__input-wrapper">
+                  <input
+                    id="resize-percentage"
+                    className="conversion-controls__input"
+                    type="number"
+                    min="1"
+                    max="400"
+                    step="1"
+                    value={settings.resize.percentage}
+                    onChange={handlePercentageChange}
+                  />
+
+                  <span>%</span>
+                </div>
+              </div>
+            )}
+
+            {settings.resize.mode === 'width' && (
+              <div className="conversion-controls__field">
+                <label
+                  htmlFor="resize-width"
+                  className="conversion-controls__label"
+                >
+                  Width
+                </label>
+
+                <div className="conversion-controls__input-wrapper">
+                  <input
+                    id="resize-width"
+                    className="conversion-controls__input"
+                    type="number"
+                    min="1"
+                    value={settings.resize.width}
+                    onChange={handleWidthChange}
+                  />
+
+                  <span>px</span>
+                </div>
+              </div>
+            )}
+
+            {settings.resize.mode === 'height' && (
+              <div className="conversion-controls__field">
+                <label
+                  htmlFor="resize-height"
+                  className="conversion-controls__label"
+                >
+                  Height
+                </label>
+
+                <div className="conversion-controls__input-wrapper">
+                  <input
+                    id="resize-height"
+                    className="conversion-controls__input"
+                    type="number"
+                    min="1"
+                    value={settings.resize.height}
+                    onChange={handleHeightChange}
+                  />
+
+                  <span>px</span>
+                </div>
+              </div>
+            )}
+
+            {settings.resize.mode !== 'percentage' && (
+              <label className="conversion-controls__checkbox">
+                <input
+                  type="checkbox"
+                  checked={settings.resize.maintainAspectRatio}
+                  onChange={handleAspectRatioChange}
+                />
+
+                <span>Maintain aspect ratio</span>
+              </label>
+            )}
+          </div>
+        )}
+      </div>
 
       <div className="conversion-controls__divider" />
 
-      <div className="conversion-controls__quality">
-        <div className="conversion-controls__quality-heading">
+      <div className="conversion-controls__section">
+        <div className="conversion-controls__section-header">
           <div>
-            <strong>Quality</strong>
-            <span>Higher quality = larger file.</span>
+            <h3>{settings.format.toUpperCase()} quality</h3>
+
+            <p>Balance image quality and file size.</p>
           </div>
-          <b>{settings.quality}</b>
+
+          <strong className="conversion-controls__quality-value">
+            {settings.quality}
+          </strong>
         </div>
 
         <input
-          className="conversion-controls__slider"
+          className="conversion-controls__range"
           type="range"
-          min="10"
+          min="1"
           max="100"
+          step="1"
           value={settings.quality}
-          onChange={(event) => {
-            setSettings({
-              ...settings,
-              quality: Number(event.target.value),
-            })
-          }}
-          aria-label="WebP quality"
+          onChange={handleQualityChange}
+          aria-label={`${settings.format.toUpperCase()} quality`}
         />
 
-        <div className="conversion-controls__range">
-          <span>Smaller</span>
+        <div className="conversion-controls__range-labels">
+          <span>Smaller file</span>
+
           <span>Higher quality</span>
         </div>
       </div>

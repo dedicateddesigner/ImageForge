@@ -1,7 +1,9 @@
-import { encode } from '@jsquash/webp'
+import { encode as encodeWebP } from '@jsquash/webp'
+import { encode as encodeAVIF } from '@jsquash/avif'
 
 interface ConvertMessage {
   id: string
+  format: 'webp' | 'avif'
   imageData: {
     data: ArrayBuffer
     width: number
@@ -11,16 +13,24 @@ interface ConvertMessage {
 }
 
 self.onmessage = async (event: MessageEvent<ConvertMessage>) => {
-  const { id, imageData, quality } = event.data
+  const { id, format, imageData, quality } = event.data
 
   try {
     const pixels = new Uint8ClampedArray(imageData.data)
 
     const data = new ImageData(pixels, imageData.width, imageData.height)
 
-    const buffer = await encode(data, {
-      quality,
-    })
+    let buffer: ArrayBuffer
+
+    if (format === 'webp') {
+      buffer = await encodeWebP(data, {
+        quality,
+      })
+    } else {
+      buffer = await encodeAVIF(data, {
+        quality,
+      })
+    }
 
     self.postMessage({
       id,
@@ -31,7 +41,10 @@ self.onmessage = async (event: MessageEvent<ConvertMessage>) => {
     self.postMessage({
       id,
       success: false,
-      error: error instanceof Error ? error.message : 'WebP conversion failed.',
+      error:
+        error instanceof Error
+          ? error.message
+          : `${format.toUpperCase()} conversion failed.`,
     })
   }
 }
