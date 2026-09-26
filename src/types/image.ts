@@ -11,6 +11,8 @@ export interface ImageFile {
   previewUrl: string
   width: number
   height: number
+  convertedWidth: number
+  convertedHeight: number
   conversionStatus: ConversionStatus
   convertedSize: number
   convertedUrl: string
@@ -22,4 +24,20 @@ export type OutputFormat = 'webp'
 export interface ConversionSettings {
   format: OutputFormat
   quality: number
+  resize: ResizeSettings
+}
+
+
+export type ResizeMode =
+  | 'percentage'
+  | 'width'
+  | 'height'
+
+export interface ResizeSettings {
+  enabled: boolean
+  mode: ResizeMode
+  percentage: number
+  width: number
+  height: number
+  maintainAspectRatio: boolean
 }

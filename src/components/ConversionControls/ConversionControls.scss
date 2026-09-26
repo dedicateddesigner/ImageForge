@@ -3,16 +3,13 @@
 .conversion-controls {
     width: min(100% - 2rem, $container-width);
     margin: 0 auto $space-7;
-    padding: $space-5;
+    padding: $space-6;
     border: 1px solid $color-border;
     border-radius: $radius-lg;
     background: $color-surface;
 
     &__header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: $space-4;
+        margin-bottom: $space-6;
     }
 
     &__eyebrow {
@@ -26,18 +23,200 @@
 
     h2 {
         margin: 0;
-        font-size: $font-lg;
+        font-size: 1.4rem;
         line-height: 1.2;
     }
 
-    &__value {
-        display: grid;
-        width: 3.5rem;
-        height: 3.5rem;
-        place-items: center;
+    h3 {
+        margin: 0;
+        font-size: $font-md;
+    }
+
+    &__description {
+        max-width: 620px;
+        margin: $space-2 0 0;
+        color: $color-text-muted;
+        font-size: $font-sm;
+        line-height: 1.5;
+    }
+
+    &__section {
+        padding-top: $space-5;
+        border-top: 1px solid $color-border;
+
+        &+& {
+            margin-top: $space-5;
+        }
+    }
+
+    &__label {
+        display: block;
+        margin-bottom: $space-2;
+        font-size: $font-sm;
+        font-weight: $font-medium;
+    }
+
+    &__hint {
+        margin: $space-2 0 0;
+        color: $color-text-muted;
+        font-size: $font-sm;
+    }
+
+    &__select {
+        width: 100%;
+        min-height: 2.75rem;
+        padding: 0 $space-3;
         border: 1px solid $color-border-dark;
         border-radius: $radius-md;
-        font-size: $font-lg;
+        background: $color-surface;
+        color: $color-text;
+        font-size: $font-sm;
+    }
+
+    &__section-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: $space-5;
+
+        p {
+            margin: $space-1 0 0;
+            color: $color-text-muted;
+            font-size: $font-sm;
+        }
+    }
+
+    &__switch {
+        position: relative;
+        flex: 0 0 auto;
+        width: 3rem;
+        height: 1.75rem;
+        cursor: pointer;
+
+        input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        span {
+            position: absolute;
+            inset: 0;
+            border-radius: 999px;
+            background: $color-border-dark;
+            transition: background 0.2s ease;
+
+            &::after {
+                position: absolute;
+                top: 0.25rem;
+                left: 0.25rem;
+                width: 1.25rem;
+                height: 1.25rem;
+                border-radius: 50%;
+                background: $color-surface;
+                content: '';
+                transition: transform 0.2s ease;
+            }
+        }
+
+        input:checked+span {
+            background: $color-accent;
+
+            &::after {
+                transform: translateX(1.25rem);
+            }
+        }
+    }
+
+    &__resize {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: $space-4;
+        margin-top: $space-5;
+        padding: $space-4;
+        border-radius: $radius-md;
+        background: $color-surface-muted;
+    }
+
+    &__field {
+        min-width: 0;
+    }
+
+    &__input {
+        display: flex;
+        align-items: center;
+        gap: $space-2;
+
+        input {
+            width: 100%;
+            min-height: 2.75rem;
+            padding: 0 $space-3;
+            border: 1px solid $color-border-dark;
+            border-radius: $radius-md;
+            background: $color-surface;
+            color: $color-text;
+        }
+
+        span {
+            color: $color-text-muted;
+            font-size: $font-sm;
+        }
+    }
+
+    &__aspect {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: flex-start;
+        gap: $space-3;
+        padding-top: $space-2;
+        cursor: pointer;
+
+        input {
+            width: 1rem;
+            height: 1rem;
+            margin-top: 0.15rem;
+            flex: 0 0 auto;
+            accent-color: $color-accent;
+        }
+
+        span {
+            display: flex;
+            flex-direction: column;
+            gap: $space-1;
+        }
+
+        strong {
+            font-size: $font-sm;
+        }
+
+        small {
+            color: $color-text-muted;
+            font-size: $font-sm;
+        }
+    }
+
+    &__quality-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: $space-4;
+
+        p {
+            margin: $space-1 0 0;
+            color: $color-text-muted;
+            font-size: $font-sm;
+        }
+
+        strong {
+            display: grid;
+            min-width: 3.5rem;
+            height: 3rem;
+            padding: 0 $space-3;
+            place-items: center;
+            border: 1px solid $color-border-dark;
+            border-radius: $radius-md;
+            font-size: $font-md;
+        }
     }
 
     &__slider {
@@ -52,5 +231,15 @@
         margin-top: $space-2;
         color: $color-text-muted;
         font-size: $font-sm;
+    }
+
+    @media (max-width: 640px) {
+        &__resize {
+            grid-template-columns: 1fr;
+        }
+
+        &__aspect {
+            grid-column: auto;
+        }
     }
 }

@@ -1,15 +1,11 @@
-@use "../../styles/variables" as *;
+@use '../../styles/variables' as *;
 
 .image-queue {
-    padding: 0 0 $space-7;
-
-    &__container {
-        width: min(100% - 2rem, $container-width);
-        margin-inline: auto;
-    }
+    width: min(100% - 2rem, $container-width);
+    margin: 0 auto $space-6;
 
     &__header {
-        margin-bottom: $space-4;
+        margin-bottom: $space-3;
     }
 
     &__eyebrow {
@@ -23,151 +19,174 @@
 
     h2 {
         margin: 0;
-        font-size: $font-xl;
-        font-weight: $font-semibold;
+        font-size: $font-lg;
     }
 
-    &__list {
+    &__grid {
         display: grid;
+        grid-template-columns: repeat(auto-fill,
+                minmax(420px, 1fr));
         gap: $space-3;
     }
+}
 
-    &__item {
-        display: grid;
-        grid-template-columns: 80px minmax(0, 1fr) auto;
-        align-items: center;
-        gap: $space-4;
+.image-card {
+    display: flex;
+    min-width: 0;
+    padding: $space-3;
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    background: $color-surface;
+}
 
-        padding: $space-3;
+.image-card__preview {
+    display: grid;
+    width: 88px;
+    height: 88px;
+    flex: 0 0 88px;
+    place-items: center;
+    overflow: hidden;
+    border-radius: $radius-md;
+    background: $color-surface-muted;
 
-        border: 1px solid $color-border;
-        border-radius: $radius-lg;
-        background: $color-surface;
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
     }
+}
 
-    &__preview {
-        width: 80px;
-        height: 80px;
+.image-card__content {
+    min-width: 0;
+    flex: 1;
+    padding-left: $space-3;
+}
 
+.image-card__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: $space-3;
+}
+
+.image-card__name {
+    min-width: 0;
+
+    strong {
+        display: block;
         overflow: hidden;
-
-        border-radius: $radius-md;
-        background: $color-surface-muted;
-
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-    }
-
-    &__info {
-        min-width: 0;
-
-        h3 {
-            margin: 0;
-
-            overflow: hidden;
-
-            color: $color-text;
-            font-size: $font-md;
-            font-weight: $font-semibold;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        p {
-            margin: $space-1 0 0;
-
-            color: $color-text-muted;
-            font-size: $font-sm;
-        }
-    }
-
-    &__remove {
-        border: 1px solid $color-border;
-        border-radius: $radius-md;
-
-        padding: 0.6rem 0.9rem;
-
-        background: transparent;
-        color: $color-text-muted;
-
+        color: $color-text;
         font-size: $font-sm;
-
-        transition:
-            background-color $transition-fast,
-            color $transition-fast,
-            border-color $transition-fast;
-
-        &:hover {
-            border-color: $color-error;
-            color: $color-error;
-        }
+        font-weight: $font-medium;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
-    @media (max-width: 600px) {
-        &__item {
-            grid-template-columns: 64px minmax(0, 1fr);
-        }
-
-        &__preview {
-            width: 64px;
-            height: 64px;
-        }
-
-        &__remove {
-            grid-column: 2;
-            justify-self: start;
-        }
+    span {
+        display: block;
+        margin-top: 2px;
+        color: $color-text-muted;
+        font-size: 0.75rem;
     }
 }
 
-.image-queue__status {
-    display: inline-block;
-    margin-top: $space-2;
+.image-card__remove {
+    display: grid;
+    width: 28px;
+    height: 28px;
+    flex: 0 0 28px;
+    padding: 0;
+    place-items: center;
+    border: 1px solid $color-border;
+    border-radius: 50%;
+    background: transparent;
     color: $color-text-muted;
-    font-size: $font-sm;
+    font-size: 1.1rem;
+    line-height: 1;
+
+    &:hover {
+        border-color: $color-border-dark;
+        color: $color-text;
+    }
 }
 
-.image-queue__result {
+.image-card__dimensions {
     display: flex;
     align-items: center;
-    gap: $space-3;
-    margin-top: $space-2;
-    font-size: $font-sm;
+    gap: $space-2;
+    margin-top: $space-3;
+    font-family: $font-family-mono;
+    font-size: 0.75rem;
     color: $color-text-muted;
 
     strong {
-        color: $color-success;
-        font-weight: $font-medium;
+        color: $color-text;
     }
 }
 
-.image-queue__error {
-    display: inline-block;
-    margin-top: $space-2;
-    color: $color-error;
-    font-size: $font-sm;
+.image-card__arrow {
+    color: $color-text-muted;
 }
 
-.image-queue__actions {
+.image-card__status {
+    margin-top: $space-2;
+    color: $color-text-muted;
+    font-size: 0.75rem;
+}
+
+.image-card__result {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: $space-3;
+    margin-top: $space-2;
+    font-size: 0.75rem;
+
+    div {
+        display: flex;
+        align-items: center;
+        gap: $space-2;
+    }
+
+    strong {
+        font-weight: $font-medium;
+    }
+
+    span {
+        color: $color-text-muted;
+    }
 }
 
-.image-queue__download {
-    padding: $space-2 $space-3;
-    border: 1px solid $color-border-dark;
-    border-radius: $radius-sm;
-    background: $color-surface;
-    color: $color-text;
-    font-size: $font-sm;
+.image-card__saved {
+    color: $color-success !important;
     font-weight: $font-medium;
-    transition: background-color $transition-fast;
+}
+
+.image-card__download {
+    display: inline-flex;
+    margin-top: $space-2;
+    padding: 0.35rem 0.65rem;
+    border: 1px solid $color-border-dark;
+    border-radius: $radius-md;
+    background: $color-surface;
+    font-size: 0.75rem;
+    font-weight: $font-medium;
 
     &:hover {
         background: $color-surface-muted;
+    }
+}
+
+.image-card__error {
+    margin-top: $space-2;
+    color: $color-error;
+    font-size: 0.75rem;
+}
+
+@media (max-width: 700px) {
+    .image-queue {
+        &__grid {
+            grid-template-columns: 1fr;
+        }
     }
 }

@@ -1,3 +1,11 @@
+import {
+  calculateResizeDimensions,
+} from './resize'
+
+import type {
+  ResizeSettings,
+} from '../types/image'
+
 interface ConvertResponse {
   id: string
   success: boolean
@@ -17,7 +25,10 @@ function createWorker() {
   )
 }
 
-async function fileToImageData(file: File): Promise<ImageData> {
+async function fileToImageData(
+  file: File,
+  resizeSettings: ResizeSettings,
+): Promise<ImageData> {
   const imageUrl = URL.createObjectURL(file)
 
   try {
@@ -27,10 +38,16 @@ async function fileToImageData(file: File): Promise<ImageData> {
 
     await image.decode()
 
+    const dimensions = calculateResizeDimensions(
+      image.naturalWidth,
+      image.naturalHeight,
+      resizeSettings,
+    )
+
     const canvas = document.createElement('canvas')
 
-    canvas.width = image.naturalWidth
-    canvas.height = image.naturalHeight
+    canvas.width = dimensions.width
+    canvas.height = dimensions.height
 
     const context = canvas.getContext('2d')
 
@@ -38,14 +55,21 @@ async function fileToImageData(file: File): Promise<ImageData> {
       throw new Error('Unable to create canvas context.')
     }
 
-    context.drawImage(image, 0, 0)
+    context.drawImage(
+      image,
+      0,
+      0,
+      dimensions.width,
+      dimensions.height,
+    )
 
     return context.getImageData(
       0,
       0,
-      image.naturalWidth,
-      image.naturalHeight,
+      dimensions.width,
+      dimensions.height,
     )
+
   } finally {
     URL.revokeObjectURL(imageUrl)
   }
@@ -54,8 +78,13 @@ async function fileToImageData(file: File): Promise<ImageData> {
 export async function convertToWebP(
   file: File,
   quality = 80,
+  resizeSettings: ResizeSettings,
 ): Promise<Blob> {
-  const imageData = await fileToImageData(file)
+  const imageData = await fileToImageData(
+    file,
+    resizeSettings,
+  )
+
   const worker = createWorker()
 
   return new Promise((resolve, reject) => {
@@ -87,7 +116,10 @@ export async function convertToWebP(
 
     worker.onerror = () => {
       worker.terminate()
-      reject(new Error('WebP worker failed.'))
+
+      reject(
+        new Error('WebP worker failed.'),
+      )
     }
 
     worker.postMessage(
