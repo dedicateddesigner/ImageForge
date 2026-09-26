@@ -24,6 +24,8 @@ export function createImageFile(file: File): ImageFile {
     previewUrl: URL.createObjectURL(file),
     width: 0,
     height: 0,
+    convertedWidth: 0,
+    convertedHeight: 0,
     conversionStatus: 'ready',
     convertedSize: 0,
     convertedUrl: '',

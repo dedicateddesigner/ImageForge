@@ -1,15 +1,18 @@
 @use '../../styles/variables' as *;
 
 .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
   width: 100%;
   border-bottom: 1px solid $color-border;
-  background: $color-surface;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px);
 
   &__container {
-    width: min(100% - 2rem, $container-width);
-    min-height: 72px;
+    min-height: 60px;
+    width: min(100% - 2rem, 1500px);
     margin-inline: auto;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -19,35 +22,31 @@
   &__brand {
     display: inline-flex;
     align-items: center;
-    gap: $space-3;
-
+    gap: $space-2;
     color: $color-text;
   }
 
   &__logo {
     display: grid;
-    width: 36px;
-    height: 36px;
-
+    width: 30px;
+    height: 30px;
     place-items: center;
-
     border-radius: $radius-sm;
     background: $color-accent;
     color: $color-surface;
-
-    font-size: $font-sm;
+    font-size: 0.65rem;
     font-weight: $font-bold;
     letter-spacing: -0.02em;
   }
 
   &__name {
-    font-size: $font-lg;
+    font-size: 0.9rem;
     font-weight: $font-semibold;
     letter-spacing: -0.02em;
   }
 
   &__tagline {
     color: $color-text-muted;
-    font-size: $font-sm;
+    font-size: 0.65rem;
   }
 }

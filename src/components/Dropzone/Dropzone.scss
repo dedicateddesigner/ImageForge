@@ -1,32 +1,25 @@
 @use '../../styles/variables' as *;
 
 .dropzone-section {
-  width: min(100% - 2rem, $container-width);
-  margin: $space-7 auto $space-6;
+  width: 100%;
+  margin: 0 0 $space-4;
 }
 
 .dropzone {
   position: relative;
-
-  min-height: 320px;
-
+  min-height: 132px;
   display: grid;
   place-items: center;
-
-  border: 2px dashed $color-border-dark;
-  border-radius: $radius-xl;
-
-  background: $color-surface;
-
+  border: 1px dashed $color-border-dark;
+  border-radius: $radius-lg;
+  background: $color-surface-muted;
   transition:
     border-color $transition-normal,
-    background-color $transition-normal,
-    transform $transition-normal;
+    background-color $transition-normal;
 
   &--dragging {
     border-color: $color-accent;
-    background: $color-surface-muted;
-    transform: scale(1.01);
+    background: $color-surface;
   }
 
   &__input {
@@ -38,75 +31,54 @@
   }
 
   &__content {
-    padding: $space-6;
-
     display: flex;
     flex-direction: column;
     align-items: center;
-
+    padding: $space-3;
     text-align: center;
   }
 
   &__icon {
-    width: 56px;
-    height: 56px;
-
     display: grid;
+    width: 30px;
+    height: 30px;
+    margin-bottom: $space-2;
     place-items: center;
-
-    margin-bottom: $space-4;
-
     border-radius: 50%;
-    background: $color-surface-muted;
-
-    font-size: $font-xl;
-    font-weight: $font-semibold;
+    background: $color-surface;
+    color: $color-text;
+    font-size: $font-md;
   }
 
   &__title {
     margin: 0;
-
-    font-size: $font-xl;
+    font-size: 0.8rem;
     font-weight: $font-semibold;
-    letter-spacing: -0.02em;
   }
 
   &__description {
-    margin: $space-2 0 $space-5;
-
+    margin: 2px 0 $space-2;
     color: $color-text-muted;
-    font-size: $font-sm;
+    font-size: 0.6rem;
   }
 
   &__button {
+    padding: 0.45rem 0.7rem;
     border: 0;
-    border-radius: $radius-md;
-
-    padding: 0.75rem 1.25rem;
-
+    border-radius: $radius-sm;
     background: $color-accent;
     color: $color-surface;
-
-    font-weight: $font-semibold;
-
-    transition:
-      background-color $transition-fast,
-      transform $transition-fast;
+    font-size: 0.68rem;
+    font-weight: $font-medium;
 
     &:hover {
       background: $color-accent-hover;
     }
-
-    &:active {
-      transform: translateY(1px);
-    }
   }
 
   &__count {
-    margin: $space-4 0 0;
-
+    margin: $space-2 0 0;
     color: $color-success;
-    font-size: $font-sm;
-    font-weight: $font-medium;
+    font-size: 0.62rem;
   }
 }

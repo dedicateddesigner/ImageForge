@@ -1,70 +1,77 @@
 @use '../../styles/variables' as *;
 
 .conversion-summary {
-    padding: 0 0 $space-7;
+  margin-top: $space-5;
+  padding: $space-4;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  background: $color-surface;
 
-    &__container {
-        width: min(100% - 2rem, $container-width);
-        margin-inline: auto;
-        padding: $space-5;
-        border: 1px solid $color-border;
-        border-radius: $radius-md;
-        background: $color-surface;
+  &__container {
+    width: 100%;
+  }
+
+  &__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: $space-3;
+    margin-bottom: $space-3;
+  }
+
+  &__eyebrow {
+    margin: 0;
+    color: $color-text-muted;
+    font-size: 0.62rem;
+    font-weight: $font-medium;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.2;
+  }
+
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: $space-2;
+  }
+
+  &__stat {
+    min-width: 0;
+    padding: $space-3;
+    border-radius: $radius-sm;
+    background: $color-surface-muted;
+
+    span,
+    strong {
+      display: block;
     }
 
-    &__header {
-        margin-bottom: $space-5;
+    span {
+      margin-bottom: 3px;
+      color: $color-text-muted;
+      font-size: 0.58rem;
     }
 
-    &__eyebrow {
-        margin: 0 0 $space-2;
-        color: $color-text-muted;
-        font-size: $font-sm;
-        font-weight: $font-medium;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
+    strong {
+      font-size: 0.75rem;
+      font-weight: $font-semibold;
     }
+  }
 
-    h2 {
-        margin: 0;
-        font-size: $font-xl;
-        line-height: 1.2;
-    }
-
+  @media (max-width: 800px) {
     &__stats {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: $space-4;
+      grid-template-columns: repeat(2, 1fr);
     }
+  }
 
-    &__stat {
-        padding: $space-4;
-        border-radius: $radius-sm;
-        background: $color-surface-muted;
-
-        span {
-            display: block;
-            margin-bottom: $space-2;
-            color: $color-text-muted;
-            font-size: $font-sm;
-        }
-
-        strong {
-            display: block;
-            font-size: $font-lg;
-            font-weight: $font-medium;
-        }
+  @media (max-width: 500px) {
+    &__stats {
+      grid-template-columns: 1fr;
     }
-
-    @media (max-width: 800px) {
-        &__stats {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-
-    @media (max-width: 500px) {
-        &__stats {
-            grid-template-columns: 1fr;
-        }
-    }
+  }
 }

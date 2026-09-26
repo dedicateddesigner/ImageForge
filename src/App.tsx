@@ -8,10 +8,7 @@ import {
   getImageDimensions,
   isDuplicateFile,
 } from './services/file-utils'
-import type {
-  ConversionSettings,
-  ImageFile,
-} from './types/image'
+import type { ConversionSettings, ImageFile } from './types/image'
 import ImageQueue from './components/ImageQueue/ImageQueue'
 import ConversionControls from './components/ConversionControls/ConversionControls'
 import { createWebPZip } from './services/zip'
@@ -22,32 +19,26 @@ function App() {
   const [isConverting, setIsConverting] = useState(false)
   const [isCreatingZip, setIsCreatingZip] = useState(false)
 
-  const [settings, setSettings] =
-    useState<ConversionSettings>({
-      format: 'webp',
-      quality: 75,
-      resize: {
-        enabled: false,
-        mode: 'percentage',
-        percentage: 100,
-        width: 0,
-        height: 0,
-        maintainAspectRatio: true,
-      },
-    })
+  const [settings, setSettings] = useState<ConversionSettings>({
+    format: 'webp',
+    quality: 75,
+    resize: {
+      enabled: false,
+      mode: 'percentage',
+      percentage: 100,
+      width: 0,
+      height: 0,
+      maintainAspectRatio: true,
+    },
+  })
 
   const handleFilesSelected = (newFiles: File[]) => {
-    const existingRawFiles = selectedFiles.map(
-      (imageFile) => imageFile.file,
-    )
+    const existingRawFiles = selectedFiles.map((imageFile) => imageFile.file)
 
     const filesToCheck = [...existingRawFiles]
 
     const uniqueFiles = newFiles.filter((newFile) => {
-      const isDuplicate = isDuplicateFile(
-        newFile,
-        filesToCheck,
-      )
+      const isDuplicate = isDuplicateFile(newFile, filesToCheck)
 
       if (!isDuplicate) {
         filesToCheck.push(newFile)
@@ -56,47 +47,37 @@ function App() {
       return !isDuplicate
     })
 
-    const duplicates =
-      newFiles.length - uniqueFiles.length
+    const duplicates = newFiles.length - uniqueFiles.length
 
     setDuplicateCount(duplicates)
 
     const newImageFiles = uniqueFiles.map(createImageFile)
 
-    setSelectedFiles((currentFiles) => [
-      ...currentFiles,
-      ...newImageFiles,
-    ])
+    setSelectedFiles((currentFiles) => [...currentFiles, ...newImageFiles])
 
     newImageFiles.forEach(async (imageFile) => {
       try {
-        const dimensions = await getImageDimensions(
-          imageFile.file,
-        )
+        const dimensions = await getImageDimensions(imageFile.file)
 
         setSelectedFiles((currentFiles) =>
           currentFiles.map((currentFile) =>
             currentFile.id === imageFile.id
               ? {
-                ...currentFile,
-                width: dimensions.width,
-                height: dimensions.height,
-              }
+                  ...currentFile,
+                  width: dimensions.width,
+                  height: dimensions.height,
+                }
               : currentFile,
           ),
         )
       } catch {
-        // Keep the image in the queue even if dimensions
-        // cannot be read.
+        // Keep the image in the queue even if dimensions cannot be read.
       }
     })
   }
 
   const handleTestConversion = async () => {
-    if (
-      selectedFiles.length === 0 ||
-      isConverting
-    ) {
+    if (selectedFiles.length === 0 || isConverting) {
       return
     }
 
@@ -107,10 +88,10 @@ function App() {
         currentFiles.map((currentFile) =>
           currentFile.id === imageFile.id
             ? {
-              ...currentFile,
-              conversionStatus: 'converting',
-              conversionError: '',
-            }
+                ...currentFile,
+                conversionStatus: 'converting',
+                conversionError: '',
+              }
             : currentFile,
         ),
       )
@@ -122,28 +103,29 @@ function App() {
           settings.resize,
         )
 
-        const convertedImage =
-          await createImageBitmap(webpBlob)
-
+        const convertedImage = await createImageBitmap(webpBlob)
         const convertedWidth = convertedImage.width
         const convertedHeight = convertedImage.height
 
         convertedImage.close()
 
-        const convertedUrl =
-          URL.createObjectURL(webpBlob)
+        const convertedUrl = URL.createObjectURL(webpBlob)
+
+        if (imageFile.convertedUrl) {
+          URL.revokeObjectURL(imageFile.convertedUrl)
+        }
 
         setSelectedFiles((currentFiles) =>
           currentFiles.map((currentFile) =>
             currentFile.id === imageFile.id
               ? {
-                ...currentFile,
-                conversionStatus: 'completed',
-                convertedSize: webpBlob.size,
-                convertedWidth,
-                convertedHeight,
-                convertedUrl,
-              }
+                  ...currentFile,
+                  conversionStatus: 'completed',
+                  convertedSize: webpBlob.size,
+                  convertedWidth,
+                  convertedHeight,
+                  convertedUrl,
+                }
               : currentFile,
           ),
         )
@@ -152,13 +134,13 @@ function App() {
           currentFiles.map((currentFile) =>
             currentFile.id === imageFile.id
               ? {
-                ...currentFile,
-                conversionStatus: 'error',
-                conversionError:
-                  error instanceof Error
-                    ? error.message
-                    : 'Conversion failed.',
-              }
+                  ...currentFile,
+                  conversionStatus: 'error',
+                  conversionError:
+                    error instanceof Error
+                      ? error.message
+                      : 'Conversion failed.',
+                }
               : currentFile,
           ),
         )
@@ -170,26 +152,18 @@ function App() {
 
   const handleDownloadAll = async () => {
     const completedFiles = selectedFiles.filter(
-      (file) =>
-        file.conversionStatus === 'completed',
+      (file) => file.conversionStatus === 'completed',
     )
 
-    if (
-      completedFiles.length === 0 ||
-      isCreatingZip
-    ) {
+    if (completedFiles.length === 0 || isCreatingZip) {
       return
     }
 
     try {
       setIsCreatingZip(true)
 
-      const zipBlob =
-        await createWebPZip(completedFiles)
-
-      const downloadUrl =
-        URL.createObjectURL(zipBlob)
-
+      const zipBlob = await createWebPZip(completedFiles)
+      const downloadUrl = URL.createObjectURL(zipBlob)
       const link = document.createElement('a')
 
       link.href = downloadUrl
@@ -201,140 +175,130 @@ function App() {
 
       URL.revokeObjectURL(downloadUrl)
     } catch (error) {
-      console.error(
-        'ZIP creation failed:',
-        error,
-      )
+      console.error('ZIP creation failed:', error)
     } finally {
       setIsCreatingZip(false)
     }
   }
 
+  const completedCount = selectedFiles.filter(
+    (file) => file.conversionStatus === 'completed',
+  ).length
+
   return (
     <>
       <Header />
 
-      <main>
-        <section className="app-intro">
-          <div className="app-intro__container">
-            <p className="app-intro__eyebrow">
-              Local image optimization
-            </p>
+      <main className="app-shell">
+        <aside className="app-sidebar">
+          <div className="app-sidebar__content">
+            <div className="app-sidebar__intro">
+              <p className="app-sidebar__eyebrow">Local image optimization</p>
+              <h1>ImageForge</h1>
+              <p>Convert and optimize your images locally.</p>
+            </div>
 
-            <h1>Convert your images.</h1>
+            <Dropzone onFilesSelected={handleFilesSelected} />
 
-            <p>
-              Convert JPG, PNG, WebP and AVIF images
-              locally, without uploading them to a
-              server.
-            </p>
+            <ConversionControls
+              settings={settings}
+              setSettings={setSettings}
+            />
+
+            {selectedFiles.length > 0 && (
+              <div className="app-sidebar__actions">
+                <button
+                  className="app-sidebar__convert"
+                  type="button"
+                  onClick={handleTestConversion}
+                  disabled={isConverting}
+                >
+                  {isConverting
+                    ? 'Converting…'
+                    : `Convert ${selectedFiles.length} ${
+                        selectedFiles.length === 1 ? 'image' : 'images'
+                      }`}
+                </button>
+
+                {completedCount > 0 && (
+                  <button
+                    className="app-sidebar__download"
+                    type="button"
+                    onClick={handleDownloadAll}
+                    disabled={isCreatingZip}
+                  >
+                    {isCreatingZip ? 'Creating ZIP…' : 'Download ZIP'}
+                  </button>
+                )}
+              </div>
+            )}
+
+            {selectedFiles.length > 0 && (
+              <div className="app-sidebar__meta">
+                <span>
+                  {selectedFiles.length} {selectedFiles.length === 1 ? 'image' : 'images'}
+                </span>
+                {duplicateCount > 0 && <span>{duplicateCount} duplicate(s) skipped</span>}
+              </div>
+            )}
           </div>
-        </section>
+        </aside>
 
-        <Dropzone
-          onFilesSelected={handleFilesSelected}
-        />
-
-
-        <ImageQueue
-          files={selectedFiles}
-          onRemove={(id) => {
-            setSelectedFiles((currentFiles) => {
-              const imageToRemove =
-                currentFiles.find(
-                  (imageFile) =>
-                    imageFile.id === id,
-                )
-
-              if (imageToRemove) {
-                URL.revokeObjectURL(
-                  imageToRemove.previewUrl,
-                )
-
-                if (
-                  imageToRemove.convertedUrl
-                ) {
-                  URL.revokeObjectURL(
-                    imageToRemove.convertedUrl,
-                  )
-                }
-              }
-
-              return currentFiles.filter(
-                (imageFile) =>
-                  imageFile.id !== id,
-              )
-            })
-          }}
-        />
-
-        <ConversionControls
-          settings={settings}
-          setSettings={setSettings}
-        />
-
-        <ConversionSummary
-          files={selectedFiles}
-        />
-
-        {selectedFiles.length > 0 && (
-          <section className="file-summary">
-            <div className="file-summary__container">
-              <strong>
-                {selectedFiles.length}
-              </strong>{' '}
-              {selectedFiles.length === 1
-                ? 'image'
-                : 'images'}{' '}
-              ready
-
-              {duplicateCount > 0 && (
-                <>
-                  {' · '}
-                  <strong>
-                    {duplicateCount}
-                  </strong>{' '}
-                  {duplicateCount === 1
-                    ? 'duplicate'
-                    : 'duplicates'}{' '}
-                  skipped
-                </>
-              )}
+        <section className="app-workspace">
+          <div className="app-workspace__inner">
+            <div className="app-workspace__header">
+              <div>
+                <p className="app-workspace__eyebrow">Image queue</p>
+                <h2>
+                  {selectedFiles.length}{' '}
+                  {selectedFiles.length === 1 ? 'image' : 'images'}
+                </h2>
+              </div>
 
               {selectedFiles.length > 0 && (
-                <section className="conversion-test">
-                  <button
-                    type="button"
-                    onClick={handleTestConversion}
-                    disabled={isConverting}
-                  >
-                    {isConverting
-                      ? 'Converting...'
-                      : 'Convert All to WebP'}
-                  </button>
-                </section>
+                <span className="app-workspace__hint">
+                  {completedCount > 0
+                    ? `${completedCount} converted`
+                    : 'Ready to convert'}
+                </span>
               )}
-
-              {selectedFiles.some(
-                (file) =>
-                  file.conversionStatus ===
-                  'completed',
-              ) && (
-                  <section className="download-all">
-                    <button
-                      type="button"
-                      onClick={handleDownloadAll}
-                      disabled={isCreatingZip}
-                    >
-                      {isCreatingZip
-                        ? 'Creating ZIP...'
-                        : 'Download All as ZIP'}
-                    </button>
-                  </section>
-                )}
             </div>
-          </section>
-        )}
+
+            {selectedFiles.length > 0 ? (
+              <>
+                <ImageQueue
+                  files={selectedFiles}
+                  onRemove={(id) => {
+                    setSelectedFiles((currentFiles) => {
+                      const imageToRemove = currentFiles.find(
+                        (imageFile) => imageFile.id === id,
+                      )
+
+                      if (imageToRemove) {
+                        URL.revokeObjectURL(imageToRemove.previewUrl)
+
+                        if (imageToRemove.convertedUrl) {
+                          URL.revokeObjectURL(imageToRemove.convertedUrl)
+                        }
+                      }
+
+                      return currentFiles.filter((imageFile) => imageFile.id !== id)
+                    })
+                  }}
+                />
+
+                <ConversionSummary files={selectedFiles} />
+              </>
+            ) : (
+              <div className="app-workspace__empty">
+                <div>
+                  <strong>Your image queue is empty</strong>
+                  <p>Add JPG, PNG, WebP or AVIF images to begin.</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
       </main>
     </>
   )

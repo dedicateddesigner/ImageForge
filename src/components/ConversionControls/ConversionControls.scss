@@ -1,245 +1,246 @@
 @use '../../styles/variables' as *;
 
 .conversion-controls {
-    width: min(100% - 2rem, $container-width);
-    margin: 0 auto $space-7;
-    padding: $space-6;
-    border: 1px solid $color-border;
-    border-radius: $radius-lg;
-    background: $color-surface;
+  width: 100%;
+  margin: 0;
+  padding: $space-4;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  background: $color-surface;
 
-    &__header {
-        margin-bottom: $space-6;
+  &__title {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: $space-2;
+    margin-bottom: $space-4;
+
+    span {
+      color: $color-text-muted;
+      font-size: 0.62rem;
+      font-weight: $font-medium;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
     }
 
-    &__eyebrow {
-        margin: 0 0 $space-1;
-        color: $color-text-muted;
-        font-size: $font-sm;
-        font-weight: $font-medium;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
+    strong {
+      font-size: 0.85rem;
+      font-weight: $font-semibold;
+    }
+  }
+
+  &__field {
+    min-width: 0;
+
+    > label {
+      display: block;
+      margin-bottom: $space-1;
+      color: $color-text-muted;
+      font-size: 0.68rem;
+      font-weight: $font-medium;
     }
 
-    h2 {
-        margin: 0;
-        font-size: 1.4rem;
-        line-height: 1.2;
+    select,
+    input[type='number'] {
+      width: 100%;
+      min-height: 2.25rem;
+      padding: 0 $space-2;
+      border: 1px solid $color-border-dark;
+      border-radius: $radius-sm;
+      background: $color-surface;
+      color: $color-text;
+      font-size: 0.75rem;
+      outline: none;
+
+      &:focus {
+        border-color: $color-text;
+        box-shadow: 0 0 0 2px rgba(23, 23, 23, 0.08);
+      }
     }
 
-    h3 {
-        margin: 0;
-        font-size: $font-md;
+    select:disabled {
+      cursor: default;
+      color: $color-text;
+      opacity: 1;
+    }
+  }
+
+  &__divider {
+    height: 1px;
+    margin: $space-4 0;
+    background: $color-border;
+  }
+
+  &__resize-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-3;
+
+    strong,
+    span {
+      display: block;
     }
 
-    &__description {
-        max-width: 620px;
-        margin: $space-2 0 0;
-        color: $color-text-muted;
-        font-size: $font-sm;
-        line-height: 1.5;
+    strong {
+      font-size: 0.8rem;
     }
 
-    &__section {
-        padding-top: $space-5;
-        border-top: 1px solid $color-border;
+    span {
+      margin-top: 2px;
+      color: $color-text-muted;
+      font-size: 0.62rem;
+      line-height: 1.35;
+    }
+  }
 
-        &+& {
-            margin-top: $space-5;
-        }
+  &__switch {
+    position: relative;
+    width: 2.5rem;
+    height: 1.45rem;
+    flex: 0 0 2.5rem;
+    cursor: pointer;
+
+    input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
     }
 
-    &__label {
-        display: block;
-        margin-bottom: $space-2;
-        font-size: $font-sm;
-        font-weight: $font-medium;
-    }
+    span {
+      position: absolute;
+      inset: 0;
+      border-radius: 999px;
+      background: $color-border-dark;
+      transition: background $transition-fast;
 
-    &__hint {
-        margin: $space-2 0 0;
-        color: $color-text-muted;
-        font-size: $font-sm;
-    }
-
-    &__select {
-        width: 100%;
-        min-height: 2.75rem;
-        padding: 0 $space-3;
-        border: 1px solid $color-border-dark;
-        border-radius: $radius-md;
+      &::after {
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: calc(1.45rem - 6px);
+        height: calc(1.45rem - 6px);
+        border-radius: 50%;
         background: $color-surface;
-        color: $color-text;
-        font-size: $font-sm;
+        content: '';
+        transition: transform $transition-fast;
+      }
     }
 
-    &__section-heading {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: $space-5;
+    input:checked + span {
+      background: $color-accent;
 
-        p {
-            margin: $space-1 0 0;
-            color: $color-text-muted;
-            font-size: $font-sm;
-        }
+      &::after {
+        transform: translateX(1.05rem);
+      }
+    }
+  }
+
+  &__resize {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(76px, 0.7fr);
+    gap: $space-3;
+    margin-top: $space-3;
+    padding: $space-3;
+    border-radius: $radius-md;
+    background: $color-surface-muted;
+  }
+
+  &__input {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+
+    input {
+      min-width: 0;
+      flex: 1;
     }
 
-    &__switch {
-        position: relative;
-        flex: 0 0 auto;
-        width: 3rem;
-        height: 1.75rem;
-        cursor: pointer;
+    span {
+      color: $color-text-muted;
+      font-size: 0.68rem;
+    }
+  }
 
-        input {
-            position: absolute;
-            opacity: 0;
-            pointer-events: none;
-        }
+  &__aspect {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: flex-start;
+    gap: $space-2;
+    margin-top: $space-1;
+    cursor: pointer;
 
-        span {
-            position: absolute;
-            inset: 0;
-            border-radius: 999px;
-            background: $color-border-dark;
-            transition: background 0.2s ease;
-
-            &::after {
-                position: absolute;
-                top: 0.25rem;
-                left: 0.25rem;
-                width: 1.25rem;
-                height: 1.25rem;
-                border-radius: 50%;
-                background: $color-surface;
-                content: '';
-                transition: transform 0.2s ease;
-            }
-        }
-
-        input:checked+span {
-            background: $color-accent;
-
-            &::after {
-                transform: translateX(1.25rem);
-            }
-        }
+    input {
+      width: 15px;
+      height: 15px;
+      margin: 1px 0 0;
+      flex: 0 0 15px;
+      accent-color: $color-accent;
     }
 
+    span {
+      color: $color-text;
+      font-size: 0.7rem;
+      font-weight: $font-medium;
+      line-height: 1.3;
+    }
+  }
+
+  &__quality-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-3;
+
+    strong,
+    span {
+      display: block;
+    }
+
+    strong {
+      font-size: 0.8rem;
+    }
+
+    span {
+      margin-top: 2px;
+      color: $color-text-muted;
+      font-size: 0.62rem;
+    }
+
+    b {
+      display: grid;
+      min-width: 2.5rem;
+      height: 2rem;
+      place-items: center;
+      border: 1px solid $color-border-dark;
+      border-radius: $radius-sm;
+      font-size: 0.75rem;
+      font-weight: $font-semibold;
+    }
+  }
+
+  &__slider {
+    width: 100%;
+    margin-top: $space-3;
+    accent-color: $color-accent;
+  }
+
+  &__range {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2px;
+    color: $color-text-muted;
+    font-size: 0.58rem;
+  }
+
+  @media (max-width: 340px) {
     &__resize {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: $space-4;
-        margin-top: $space-5;
-        padding: $space-4;
-        border-radius: $radius-md;
-        background: $color-surface-muted;
-    }
-
-    &__field {
-        min-width: 0;
-    }
-
-    &__input {
-        display: flex;
-        align-items: center;
-        gap: $space-2;
-
-        input {
-            width: 100%;
-            min-height: 2.75rem;
-            padding: 0 $space-3;
-            border: 1px solid $color-border-dark;
-            border-radius: $radius-md;
-            background: $color-surface;
-            color: $color-text;
-        }
-
-        span {
-            color: $color-text-muted;
-            font-size: $font-sm;
-        }
+      grid-template-columns: 1fr;
     }
 
     &__aspect {
-        grid-column: 1 / -1;
-        display: flex;
-        align-items: flex-start;
-        gap: $space-3;
-        padding-top: $space-2;
-        cursor: pointer;
-
-        input {
-            width: 1rem;
-            height: 1rem;
-            margin-top: 0.15rem;
-            flex: 0 0 auto;
-            accent-color: $color-accent;
-        }
-
-        span {
-            display: flex;
-            flex-direction: column;
-            gap: $space-1;
-        }
-
-        strong {
-            font-size: $font-sm;
-        }
-
-        small {
-            color: $color-text-muted;
-            font-size: $font-sm;
-        }
+      grid-column: auto;
     }
-
-    &__quality-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: $space-4;
-
-        p {
-            margin: $space-1 0 0;
-            color: $color-text-muted;
-            font-size: $font-sm;
-        }
-
-        strong {
-            display: grid;
-            min-width: 3.5rem;
-            height: 3rem;
-            padding: 0 $space-3;
-            place-items: center;
-            border: 1px solid $color-border-dark;
-            border-radius: $radius-md;
-            font-size: $font-md;
-        }
-    }
-
-    &__slider {
-        width: 100%;
-        margin-top: $space-5;
-        accent-color: $color-accent;
-    }
-
-    &__range {
-        display: flex;
-        justify-content: space-between;
-        margin-top: $space-2;
-        color: $color-text-muted;
-        font-size: $font-sm;
-    }
-
-    @media (max-width: 640px) {
-        &__resize {
-            grid-template-columns: 1fr;
-        }
-
-        &__aspect {
-            grid-column: auto;
-        }
-    }
+  }
 }
