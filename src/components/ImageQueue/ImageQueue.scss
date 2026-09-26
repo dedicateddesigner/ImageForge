@@ -24,14 +24,13 @@
 
     &__grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill,
-                minmax(420px, 1fr));
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: $space-3;
     }
 }
 
 .image-card {
-    display: flex;
+    position: relative;
     min-width: 0;
     padding: $space-3;
     border: 1px solid $color-border;
@@ -40,12 +39,12 @@
 }
 
 .image-card__preview {
+    width: 100%;
+    aspect-ratio: 4 / 3;
     display: grid;
-    width: 88px;
-    height: 88px;
-    flex: 0 0 88px;
     place-items: center;
     overflow: hidden;
+    margin-bottom: $space-3;
     border-radius: $radius-md;
     background: $color-surface-muted;
 
@@ -58,19 +57,18 @@
 
 .image-card__content {
     min-width: 0;
-    flex: 1;
-    padding-left: $space-3;
 }
 
 .image-card__top {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: $space-3;
+    gap: $space-2;
 }
 
 .image-card__name {
     min-width: 0;
+    padding-right: $space-2;
 
     strong {
         display: block;
@@ -84,7 +82,7 @@
 
     span {
         display: block;
-        margin-top: 2px;
+        margin-top: 3px;
         color: $color-text-muted;
         font-size: 0.75rem;
     }
@@ -92,16 +90,16 @@
 
 .image-card__remove {
     display: grid;
-    width: 28px;
-    height: 28px;
-    flex: 0 0 28px;
+    width: 26px;
+    height: 26px;
+    flex: 0 0 26px;
     padding: 0;
     place-items: center;
     border: 1px solid $color-border;
     border-radius: 50%;
     background: transparent;
     color: $color-text-muted;
-    font-size: 1.1rem;
+    font-size: 1rem;
     line-height: 1;
 
     &:hover {
@@ -113,10 +111,12 @@
 .image-card__dimensions {
     display: flex;
     align-items: center;
-    gap: $space-2;
+    flex-wrap: wrap;
+    gap: 4px;
     margin-top: $space-3;
     font-family: $font-family-mono;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
+    line-height: 1.4;
     color: $color-text-muted;
 
     strong {
@@ -138,7 +138,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: $space-3;
+    gap: $space-2;
     margin-top: $space-2;
     font-size: 0.75rem;
 
@@ -160,11 +160,12 @@
 .image-card__saved {
     color: $color-success !important;
     font-weight: $font-medium;
+    white-space: nowrap;
 }
 
 .image-card__download {
     display: inline-flex;
-    margin-top: $space-2;
+    margin-top: $space-3;
     padding: 0.35rem 0.65rem;
     border: 1px solid $color-border-dark;
     border-radius: $radius-md;
@@ -183,7 +184,35 @@
     font-size: 0.75rem;
 }
 
-@media (max-width: 700px) {
+/* Large desktop */
+@media (min-width: 1400px) {
+    .image-queue {
+        &__grid {
+            gap: $space-4;
+        }
+    }
+}
+
+/* Tablet */
+@media (max-width: 1100px) {
+    .image-queue {
+        &__grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+    }
+}
+
+/* Small tablet */
+@media (max-width: 800px) {
+    .image-queue {
+        &__grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+}
+
+/* Mobile */
+@media (max-width: 520px) {
     .image-queue {
         &__grid {
             grid-template-columns: 1fr;
