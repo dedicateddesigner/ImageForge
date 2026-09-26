@@ -16,3 +16,10 @@ export interface ImageFile {
   convertedUrl: string
   conversionError: string
 }
+
+export type OutputFormat = 'webp'
+
+export interface ConversionSettings {
+  format: OutputFormat
+  quality: number
+}

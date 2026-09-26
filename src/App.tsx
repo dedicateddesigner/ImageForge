@@ -10,6 +10,7 @@ import {
 } from './services/file-utils'
 import type { ImageFile } from './types/image'
 import ImageQueue from './components/ImageQueue/ImageQueue'
+import ConversionControls from './components/ConversionControls/ConversionControls'
 import { createWebPZip } from './services/zip'
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
   const [duplicateCount, setDuplicateCount] = useState(0)
   const [isConverting, setIsConverting] = useState(false)
   const [isCreatingZip, setIsCreatingZip] = useState(false)
+  const [quality, setQuality] = useState(75)
 
   const handleFilesSelected = (newFiles: File[]) => {
     const existingRawFiles = selectedFiles.map((imageFile) => imageFile.file)
@@ -83,7 +85,7 @@ function App() {
       )
 
       try {
-        const webpBlob = await convertToWebP(imageFile.file, 80)
+        const webpBlob = await convertToWebP(imageFile.file, quality)
 
         const convertedUrl = URL.createObjectURL(webpBlob)
 
@@ -200,6 +202,7 @@ function App() {
             })
           }}
         />
+        <ConversionControls quality={quality} setQuality={setQuality} />
 
         <ConversionSummary files={selectedFiles} />
 

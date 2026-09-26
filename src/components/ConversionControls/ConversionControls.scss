@@ -1,0 +1,56 @@
+@use '../../styles/variables' as *;
+
+.conversion-controls {
+    width: min(100% - 2rem, $container-width);
+    margin: 0 auto $space-7;
+    padding: $space-5;
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    background: $color-surface;
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: $space-4;
+    }
+
+    &__eyebrow {
+        margin: 0 0 $space-1;
+        color: $color-text-muted;
+        font-size: $font-sm;
+        font-weight: $font-medium;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    h2 {
+        margin: 0;
+        font-size: $font-lg;
+        line-height: 1.2;
+    }
+
+    &__value {
+        display: grid;
+        width: 3.5rem;
+        height: 3.5rem;
+        place-items: center;
+        border: 1px solid $color-border-dark;
+        border-radius: $radius-md;
+        font-size: $font-lg;
+    }
+
+    &__slider {
+        width: 100%;
+        margin-top: $space-5;
+        accent-color: $color-accent;
+    }
+
+    &__range {
+        display: flex;
+        justify-content: space-between;
+        margin-top: $space-2;
+        color: $color-text-muted;
+        font-size: $font-sm;
+    }
+}
