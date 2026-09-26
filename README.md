@@ -1,8 +1,7 @@
 # ImageForge
 
 ImageForge is a local-first bulk image converter and optimizer built
-with React, TypeScript, Vite, SCSS, Web Workers, WebAssembly, and Tauri
-2.
+with React, TypeScript, Vite, SCSS, Web Workers, WebAssembly, and Tauri 2.
 
 It is designed to provide a fast, privacy-friendly workflow for
 converting and optimizing images without uploading them to a server.
@@ -11,48 +10,48 @@ converting and optimizing images without uploading them to a server.
 
 ### Image conversion
 
--   Convert images to **WebP**
--   Convert images to **AVIF**
--   Adjustable output quality
--   Batch conversion
--   Local image processing
+- Convert images to **WebP**
+- Convert images to **AVIF**
+- Adjustable output quality
+- Batch conversion
+- Local image processing
 
 ### Resize
 
--   Resize by percentage
--   Resize by target width
--   Resize by target height
--   Maintain aspect ratio
+- Resize by percentage
+- Resize by target width
+- Resize by target height
+- Maintain aspect ratio
 
 ### Image queue
 
--   Drag-and-drop image selection
--   Add multiple images
--   Duplicate file detection
--   Responsive masonry layout
--   Natural image aspect ratios
--   Remove individual images
--   Original and converted dimensions
+- Drag-and-drop image selection
+- Add multiple images
+- Duplicate file detection
+- Responsive masonry layout
+- Natural image aspect ratios
+- Remove individual images
+- Original and converted dimensions
 
 ### Compression results
 
--   Original file size
--   Converted file size
--   Total saved size
--   Overall percentage reduction
--   Per-image compression result
+- Original file size
+- Converted file size
+- Total saved size
+- Overall percentage reduction
+- Per-image compression result
 
 ### Downloads
 
--   Individual converted-image downloads
--   Download completed conversions as a ZIP file
+- Individual converted-image downloads
+- Download completed conversions as a ZIP file
 
 ### Desktop app
 
--   Native macOS application using **Tauri 2**
--   Same React/Vite frontend as the web app
--   Local processing
--   macOS `.app` and `.dmg` builds
+- Native macOS application using **Tauri 2**
+- Same React/Vite frontend as the web app
+- Local processing
+- macOS `.app` and `.dmg` builds
 
 ## Privacy
 
@@ -62,20 +61,20 @@ uploaded to a conversion server.
 
 ## Tech Stack
 
--   React
--   TypeScript
--   Vite
--   SCSS
--   Web Workers
--   WebAssembly
--   @jsquash/webp
--   @jsquash/avif
--   JSZip
--   Tauri 2
+- React
+- TypeScript
+- Vite
+- SCSS
+- Web Workers
+- WebAssembly
+- @jsquash/webp
+- @jsquash/avif
+- JSZip
+- Tauri 2
 
 ## Project Structure
 
-``` text
+```text
 ImageForge/
 ├── src/
 │   ├── components/
@@ -112,21 +111,21 @@ ImageForge/
 
 ### Web development
 
--   Node.js
--   npm
+- Node.js
+- npm
 
 ### macOS desktop development
 
--   macOS
--   Node.js
--   npm
--   Rust
--   Cargo
--   Xcode Command Line Tools
+- macOS
+- Node.js
+- npm
+- Rust
+- Cargo
+- Xcode Command Line Tools
 
 Install Xcode Command Line Tools:
 
-``` bash
+```bash
 xcode-select --install
 ```
 
@@ -136,14 +135,14 @@ Install Rust through `rustup` if it is not already installed.
 
 Clone the repository:
 
-``` bash
+```bash
 git clone https://github.com/dedicateddesigner/ImageForge.git
 cd ImageForge
 ```
 
 Install dependencies:
 
-``` bash
+```bash
 npm install
 ```
 
@@ -151,13 +150,13 @@ npm install
 
 Start the web application:
 
-``` bash
+```bash
 npm run dev
 ```
 
 Build the production web application:
 
-``` bash
+```bash
 npm run build
 ```
 
@@ -169,44 +168,46 @@ ImageForge uses Tauri 2 for the native macOS application.
 
 Run the desktop app in development:
 
-``` bash
+```bash
 npm run tauri dev
 ```
 
 Build the macOS `.app`:
 
-``` bash
+```bash
 npm run tauri build -- --bundles app
 ```
 
 Build the macOS DMG:
 
-``` bash
+```bash
 npm run tauri build -- --bundles dmg
 ```
 
 The generated bundles are placed under:
 
-``` text
+```text
 src-tauri/target/release/bundle/
 ```
 
 ## Available Scripts
 
-  Command                                  Purpose
-  ---------------------------------------- --------------------------------------------
-  `npm run dev`                            Start the Vite development server
-  `npm run build`                          Type-check and create the production build
-  `npm run lint`                           Run ESLint
-  `npm run format`                         Format files with Prettier
-  `npm run format:check`                   Check Prettier formatting
-  `npm run tauri dev`                      Run the native desktop app
-  `npm run tauri build -- --bundles app`   Build the macOS `.app`
-  `npm run tauri build -- --bundles dmg`   Build the macOS DMG
+Command Purpose
+
+---
+
+`npm run dev` Start the Vite development server
+`npm run build` Type-check and create the production build
+`npm run lint` Run ESLint
+`npm run format` Format files with Prettier
+`npm run format:check` Check Prettier formatting
+`npm run tauri dev` Run the native desktop app
+`npm run tauri build -- --bundles app` Build the macOS `.app`
+`npm run tauri build -- --bundles dmg` Build the macOS DMG
 
 ## Architecture
 
-``` text
+```text
 React UI
    │
    ├── Image Queue
@@ -236,32 +237,32 @@ Heavy encoding work runs inside a Web Worker to keep the UI responsive.
 
 The first stable milestone includes:
 
--   WebP conversion
--   AVIF conversion
--   Quality controls
--   Image resizing
--   Duplicate detection
--   Batch conversion
--   Compression summary
--   Individual downloads
--   ZIP export
--   Responsive masonry queue
--   macOS desktop application
+- WebP conversion
+- AVIF conversion
+- Quality controls
+- Image resizing
+- Duplicate detection
+- Batch conversion
+- Compression summary
+- Individual downloads
+- ZIP export
+- Responsive masonry queue
+- macOS desktop application
 
 ## Roadmap
 
 Potential future improvements:
 
--   JPEG output
--   Target file-size optimization
--   Metadata controls
--   Conversion presets
--   Before/after comparison
--   Improved worker performance
--   Desktop application icons and metadata
--   macOS code signing and notarization
--   Windows desktop build
--   Cross-platform release workflow
+- JPEG output
+- Target file-size optimization
+- Metadata controls
+- Conversion presets
+- Before/after comparison
+- Improved worker performance
+- Desktop application icons and metadata
+- macOS code signing and notarization
+- Windows desktop build
+- Cross-platform release workflow
 
 ## Project Status
 
@@ -269,3 +270,11 @@ ImageForge v1.0.0 establishes the core conversion pipeline and a usable
 macOS desktop application.
 
 The project is actively being developed.
+
+## Download
+
+### macOS
+
+[Download ImageForge for macOS](https://github.com/dedicateddesigner/ImageForge/releases/latest)
+
+The latest macOS release is available as a DMG installer.
