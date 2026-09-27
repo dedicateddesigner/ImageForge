@@ -226,7 +226,9 @@ function App() {
           <div className="app-sidebar__brand">
             <p className="app-sidebar__eyebrow">Local image optimization</p>
 
-            <h1>ImageForge</h1>
+            <h1>
+              Image<span>Forge</span>
+            </h1>
 
             <p>Convert and optimize your images locally.</p>
           </div>

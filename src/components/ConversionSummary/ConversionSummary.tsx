@@ -1,26 +1,25 @@
 import type { ImageFile } from '../../types/image'
-import './ConversionSummary.scss'
 
 interface ConversionSummaryProps {
   files: ImageFile[]
 }
 
-function formatFileSize(size: number) {
-  if (size < 1024 * 1024) {
-    return `${(size / 1024).toFixed(1)} KB`
+function formatFileSize(bytes: number): string {
+  if (bytes < 1024) {
+    return `${bytes} B`
   }
 
-  return `${(size / (1024 * 1024)).toFixed(2)} MB`
+  if (bytes < 1024 * 1024) {
+    return `${(bytes / 1024).toFixed(1)} KB`
+  }
+
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 }
 
 function ConversionSummary({ files }: ConversionSummaryProps) {
   const completedFiles = files.filter(
     (file) => file.conversionStatus === 'completed',
   )
-
-  if (completedFiles.length === 0) {
-    return null
-  }
 
   const originalSize = completedFiles.reduce(
     (total, file) => total + file.size,
@@ -32,45 +31,47 @@ function ConversionSummary({ files }: ConversionSummaryProps) {
     0,
   )
 
-  const savedSize = originalSize - convertedSize
+  const savedSize = Math.max(originalSize - convertedSize, 0)
 
-  const reductionPercentage =
-    originalSize > 0 ? (savedSize / originalSize) * 100 : 0
+  const reduction =
+    originalSize > 0
+      ? Math.round(((originalSize - convertedSize) / originalSize) * 100)
+      : 0
 
   return (
     <section className="conversion-summary">
-      <div className="conversion-summary__container">
-        <div className="conversion-summary__header">
-          <p className="conversion-summary__eyebrow">Conversion complete</p>
+      <div className="conversion-summary__header">
+        <div>
+          <p className="conversion-summary__eyebrow">Compression summary</p>
 
-          <h2>
-            {completedFiles.length}{' '}
-            {completedFiles.length === 1
-              ? 'image converted'
-              : 'images converted'}
-          </h2>
+          <h2>Overall results</h2>
         </div>
 
-        <div className="conversion-summary__stats">
-          <div className="conversion-summary__stat">
-            <span>Original size</span>
-            <strong>{formatFileSize(originalSize)}</strong>
-          </div>
+        <span className="conversion-summary__count">
+          {completedFiles.length}{' '}
+          {completedFiles.length === 1 ? 'image' : 'images'}
+        </span>
+      </div>
 
-          <div className="conversion-summary__stat">
-            <span>Converted size</span>
-            <strong>{formatFileSize(convertedSize)}</strong>
-          </div>
+      <div className="conversion-summary__stats">
+        <div className="conversion-summary__stat">
+          <span>Original</span>
+          <strong>{formatFileSize(originalSize)}</strong>
+        </div>
 
-          <div className="conversion-summary__stat">
-            <span>Space saved</span>
-            <strong>{formatFileSize(savedSize)}</strong>
-          </div>
+        <div className="conversion-summary__stat">
+          <span>Converted</span>
+          <strong>{formatFileSize(convertedSize)}</strong>
+        </div>
 
-          <div className="conversion-summary__stat">
-            <span>Overall reduction</span>
-            <strong>{reductionPercentage.toFixed(1)}%</strong>
-          </div>
+        <div className="conversion-summary__stat">
+          <span>Saved</span>
+          <strong>{formatFileSize(savedSize)}</strong>
+        </div>
+
+        <div className="conversion-summary__stat conversion-summary__stat--highlight">
+          <span>Reduction</span>
+          <strong>{reduction}%</strong>
         </div>
       </div>
     </section>
