@@ -28,8 +28,8 @@ function App() {
   const [isCreatingZip, setIsCreatingZip] = useState(false)
 
   const [settings, setSettings] = useState<ConversionSettings>({
-    format: 'webp',
-    quality: 75,
+    format: 'avif',
+    quality: 50,
 
     resize: {
       enabled: false,
