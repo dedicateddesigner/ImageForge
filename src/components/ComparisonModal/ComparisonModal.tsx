@@ -48,22 +48,22 @@ function ComparisonModal({
           </div>
         </div>
 
-        <div className="comparison-modal__images">
-          <div className="comparison-modal__panel">
-            <div className="comparison-modal__label">Original</div>
-
-            <div className="comparison-modal__image">
-              <img src={originalUrl} alt={`Original ${originalName}`} />
-            </div>
+        <div className="comparison-modal__comparison">
+          <div className="comparison-modal__image comparison-modal__image--original">
+            <img src={originalUrl} alt={`Original ${originalName}`} />
           </div>
 
-          <div className="comparison-modal__panel">
-            <div className="comparison-modal__label">Converted</div>
-
-            <div className="comparison-modal__image">
-              <img src={convertedUrl} alt={`Converted ${originalName}`} />
-            </div>
+          <div className="comparison-modal__image comparison-modal__image--converted">
+            <img src={convertedUrl} alt={`Converted ${originalName}`} />
           </div>
+
+          <span className="comparison-modal__label comparison-modal__label--original">
+            Original
+          </span>
+
+          <span className="comparison-modal__label comparison-modal__label--converted">
+            Converted
+          </span>
         </div>
       </div>
     </div>
