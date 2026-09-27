@@ -1,4 +1,7 @@
+import { useRef } from 'react'
+
 import type { ImageFile, OutputFormat } from '../../types/image'
+import { useMasonryColumns } from '../../hooks/useMasonryColumns'
 
 interface ImageQueueProps {
   files: ImageFile[]
@@ -35,11 +38,33 @@ function getFileExtension(filename: string): string {
   return extension ? extension.toUpperCase() : 'IMAGE'
 }
 
+function reorderForMasonry<T>(items: T[], columnCount: number): T[] {
+  if (columnCount <= 1) {
+    return items
+  }
+
+  const reordered: T[] = []
+
+  for (let column = 0; column < columnCount; column += 1) {
+    for (let index = column; index < items.length; index += columnCount) {
+      reordered.push(items[index])
+    }
+  }
+
+  return reordered
+}
+
 function ImageQueue({ files, format, onRemove }: ImageQueueProps) {
+  const gridRef = useRef<HTMLDivElement>(null)
+
+  const columnCount = useMasonryColumns(gridRef)
+
+  const orderedFiles = reorderForMasonry(files, columnCount)
+
   return (
     <div className="image-queue">
-      <div className="image-queue__grid">
-        {files.map((imageFile) => {
+      <div ref={gridRef} className="image-queue__grid">
+        {orderedFiles.map((imageFile) => {
           const reduction = calculateReduction(
             imageFile.size,
             imageFile.convertedSize,
