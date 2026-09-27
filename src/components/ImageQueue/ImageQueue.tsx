@@ -1,7 +1,9 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 
 import type { ImageFile, OutputFormat } from '../../types/image'
 import { useMasonryColumns } from '../../hooks/useMasonryColumns'
+
+import ComparisonModal from '../ComparisonModal/ComparisonModal'
 import './ImageQueue.scss'
 
 interface ImageQueueProps {
@@ -57,6 +59,7 @@ function reorderForMasonry<T>(items: T[], columnCount: number): T[] {
 
 function ImageQueue({ files, format, onRemove }: ImageQueueProps) {
   const gridRef = useRef<HTMLDivElement>(null)
+  const [comparisonFile, setComparisonFile] = useState<ImageFile | null>(null)
 
   const columnCount = useMasonryColumns(gridRef)
 
@@ -152,7 +155,11 @@ function ImageQueue({ files, format, onRemove }: ImageQueueProps) {
                         Download
                       </a>
 
-                      <button className="image-card__compare" type="button">
+                      <button
+                        className="image-card__compare"
+                        type="button"
+                        onClick={() => setComparisonFile(imageFile)}
+                      >
                         Compare
                       </button>
                     </div>
@@ -163,6 +170,13 @@ function ImageQueue({ files, format, onRemove }: ImageQueueProps) {
           )
         })}
       </div>
+      <ComparisonModal
+        isOpen={comparisonFile !== null}
+        originalUrl={comparisonFile?.previewUrl ?? ''}
+        convertedUrl={comparisonFile?.convertedUrl ?? ''}
+        originalName={comparisonFile?.name ?? ''}
+        onClose={() => setComparisonFile(null)}
+      />
     </div>
   )
 }
