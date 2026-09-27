@@ -2,6 +2,7 @@ import { useRef } from 'react'
 
 import type { ImageFile, OutputFormat } from '../../types/image'
 import { useMasonryColumns } from '../../hooks/useMasonryColumns'
+import './ImageQueue.scss'
 
 interface ImageQueueProps {
   files: ImageFile[]
