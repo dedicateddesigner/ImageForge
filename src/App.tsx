@@ -11,7 +11,7 @@ import { convertImage } from './services/converter'
 import {
   createImageFile,
   getImageDimensions,
-  isDuplicateFile,
+  getFileHash,
 } from './services/file-utils'
 
 import { createConversionZip } from './services/zip'
@@ -41,26 +41,35 @@ function App() {
     },
   })
 
-  const handleFilesSelected = (newFiles: File[]) => {
-    const existingRawFiles = selectedFiles.map((imageFile) => imageFile.file)
+  const handleFilesSelected = async (newFiles: File[]) => {
+    const existingHashes = new Set(
+      selectedFiles.map((file) => file.hash).filter(Boolean),
+    )
 
-    const filesToCheck = [...existingRawFiles]
+    const uniqueFiles: { file: File; hash: string }[] = []
+    const newHashes = new Set<string>()
+    let duplicates = 0
 
-    const uniqueFiles = newFiles.filter((newFile) => {
-      const isDuplicate = isDuplicateFile(newFile, filesToCheck)
+    for (const file of newFiles) {
+      const hash = await getFileHash(file)
 
-      if (!isDuplicate) {
-        filesToCheck.push(newFile)
+      if (existingHashes.has(hash) || newHashes.has(hash)) {
+        duplicates++
+        continue
       }
 
-      return !isDuplicate
-    })
-
-    const duplicates = newFiles.length - uniqueFiles.length
+      uniqueFiles.push({ file, hash })
+      newHashes.add(hash)
+    }
 
     setDuplicateCount(duplicates)
 
-    const newImageFiles = uniqueFiles.map(createImageFile)
+    const newImageFiles = uniqueFiles.map(({ file, hash }) => {
+      const imageFile = createImageFile(file)
+      imageFile.hash = hash
+
+      return imageFile
+    })
 
     setSelectedFiles((currentFiles) => [...currentFiles, ...newImageFiles])
 
@@ -80,8 +89,7 @@ function App() {
           ),
         )
       } catch {
-        // Keep the image in the queue
-        // if dimensions cannot be read.
+        // Keep image in queue if dimensions cannot be read.
       }
     })
   }

@@ -1,15 +1,11 @@
 import type { ImageFile } from '../types/image'
 
-export function createFileFingerprint(file: File) {
-  return [file.name.toLowerCase(), file.size, file.lastModified].join('|')
-}
+export async function getFileHash(file: File): Promise<string> {
+  const buffer = await file.arrayBuffer()
+  const hashBuffer = await crypto.subtle.digest('SHA-256', buffer)
+  const hashArray = Array.from(new Uint8Array(hashBuffer))
 
-export function isDuplicateFile(file: File, existingFiles: File[]) {
-  const fingerprint = createFileFingerprint(file)
-
-  return existingFiles.some(
-    (existingFile) => createFileFingerprint(existingFile) === fingerprint,
-  )
+  return hashArray.map((byte) => byte.toString(16).padStart(2, '0')).join('')
 }
 
 export function createImageFile(file: File): ImageFile {
@@ -20,7 +16,7 @@ export function createImageFile(file: File): ImageFile {
     size: file.size,
     type: file.type,
     lastModified: file.lastModified,
-    fingerprint: createFileFingerprint(file),
+    hash: '',
     previewUrl: URL.createObjectURL(file),
     width: 0,
     height: 0,

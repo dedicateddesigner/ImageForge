@@ -7,7 +7,7 @@ export interface ImageFile {
   size: number
   type: string
   lastModified: number
-  fingerprint: string
+  hash: string
   previewUrl: string
   width: number
   height: number
