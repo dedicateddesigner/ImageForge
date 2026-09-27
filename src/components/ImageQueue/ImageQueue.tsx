@@ -77,7 +77,18 @@ function ImageQueue({ files, format, onRemove }: ImageQueueProps) {
           return (
             <article className="image-card" key={imageFile.id}>
               <div className="image-card__preview">
-                <img src={imageFile.previewUrl} alt={imageFile.name} />
+                {imageFile.conversionStatus === 'completed' ? (
+                  <button
+                    className="image-card__compare-preview"
+                    type="button"
+                    onClick={() => setComparisonFile(imageFile)}
+                    aria-label={`Compare ${imageFile.name}`}
+                  >
+                    <img src={imageFile.previewUrl} alt={imageFile.name} />
+                  </button>
+                ) : (
+                  <img src={imageFile.previewUrl} alt={imageFile.name} />
+                )}
 
                 <button
                   className="image-card__remove"
