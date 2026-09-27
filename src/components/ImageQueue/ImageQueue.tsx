@@ -139,16 +139,22 @@ function ImageQueue({ files, format, onRemove }: ImageQueueProps) {
                       </span>
                     </div>
 
-                    <a
-                      className="image-card__download"
-                      href={imageFile.convertedUrl}
-                      download={imageFile.name.replace(
-                        /\.[^/.]+$/,
-                        `.${format}`,
-                      )}
-                    >
-                      Download
-                    </a>
+                    <div className="image-card__actions">
+                      <a
+                        className="image-card__download"
+                        href={imageFile.convertedUrl}
+                        download={imageFile.name.replace(
+                          /\.[^/.]+$/,
+                          `.${format}`,
+                        )}
+                      >
+                        Download
+                      </a>
+
+                      <button className="image-card__compare" type="button">
+                        Compare
+                      </button>
+                    </div>
                   </>
                 )}
               </div>

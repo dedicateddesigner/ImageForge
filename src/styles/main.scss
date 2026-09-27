@@ -901,19 +901,25 @@ img {
   white-space: nowrap;
 }
 
-
 /* =========================================================
-   DOWNLOAD
+   CARD ACTIONS
    ========================================================= */
 
-.image-card__download {
+.image-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.image-card__actions a,
+.image-card__actions button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
   min-height: 25px;
 
-  margin-top: 7px;
   padding: 0 9px;
 
   border: 1px solid #cfcfc9;
@@ -922,13 +928,21 @@ img {
   background: #ffffff;
   color: #222222;
 
+  font: inherit;
   font-size: 9px;
   font-weight: 500;
 
+  line-height: 1;
+
   text-decoration: none;
+
+  cursor: pointer;
+
+  box-sizing: border-box;
 }
 
-.image-card__download:hover {
+.image-card__actions a:hover,
+.image-card__actions button:hover {
   background: #f3f3f0;
 }
 
