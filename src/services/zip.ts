@@ -28,6 +28,7 @@ export async function createConversionZip(
 
   return zip.generateAsync({
     type: 'blob',
+    streamFiles: true,
     compression: 'DEFLATE',
     compressionOptions: {
       level: 6,

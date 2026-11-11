@@ -1,7 +1,7 @@
 {
   "name": "imageforge",
   "private": true,
-  "version": "1.2.0",
+  "version": "1.2.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -15,6 +15,9 @@
   "dependencies": {
     "@jsquash/avif": "^2.1.1",
     "@jsquash/webp": "^1.5.0",
+    "@tauri-apps/api": "^2.12.4",
+    "@tauri-apps/plugin-dialog": "^2.8.4",
+    "@tauri-apps/plugin-fs": "^2.7.1",
     "jszip": "^3.10.2",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"

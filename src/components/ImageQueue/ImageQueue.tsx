@@ -4,6 +4,8 @@ import type { ImageFile, OutputFormat } from '../../types/image'
 
 import { useMasonryColumns } from '../../hooks/useMasonryColumns'
 
+import { saveFile } from '../../services/download'
+
 import ComparisonModal from '../ComparisonModal/ComparisonModal'
 
 import './ImageQueue.scss'
@@ -67,6 +69,23 @@ function ImageQueue({ files, format, onRemove }: ImageQueueProps) {
   const columnCount = useMasonryColumns(gridRef)
 
   const orderedFiles = reorderForMasonry(files, columnCount)
+
+  const handleDownload = async (imageFile: ImageFile) => {
+    try {
+      const response = await fetch(imageFile.convertedUrl)
+
+      if (!response.ok) {
+        throw new Error(`Unable to read converted file: ${imageFile.name}`)
+      }
+
+      const blob = await response.blob()
+      const filename = imageFile.name.replace(/\.[^/.]+$/, `.${format}`)
+
+      await saveFile(blob, filename)
+    } catch (error) {
+      console.error(`Download failed for ${imageFile.name}:`, error)
+    }
+  }
 
   return (
     <div className="image-queue">
@@ -158,16 +177,13 @@ function ImageQueue({ files, format, onRemove }: ImageQueueProps) {
                     </div>
 
                     <div className="image-card__actions">
-                      <a
+                      <button
                         className="image-card__download"
-                        href={imageFile.convertedUrl}
-                        download={imageFile.name.replace(
-                          /\.[^/.]+$/,
-                          `.${format}`,
-                        )}
+                        type="button"
+                        onClick={() => handleDownload(imageFile)}
                       >
                         Download
-                      </a>
+                      </button>
                     </div>
                   </>
                 )}

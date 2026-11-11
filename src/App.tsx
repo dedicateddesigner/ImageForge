@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 import Header from './components/Header/Header'
 import Dropzone from './components/Dropzone/Dropzone'
@@ -18,7 +18,11 @@ import { createConversionZip } from './services/zip'
 
 import type { ConversionSettings, ImageFile } from './types/image'
 
+import { saveFile } from './services/download'
+
 function App() {
+  const zipInProgressRef = useRef(false)
+
   const [selectedFiles, setSelectedFiles] = useState<ImageFile[]>([])
 
   const [duplicateCount, setDuplicateCount] = useState(0)
@@ -81,10 +85,10 @@ function App() {
           currentFiles.map((currentFile) =>
             currentFile.id === imageFile.id
               ? {
-                  ...currentFile,
-                  width: dimensions.width,
-                  height: dimensions.height,
-                }
+                ...currentFile,
+                width: dimensions.width,
+                height: dimensions.height,
+              }
               : currentFile,
           ),
         )
@@ -106,10 +110,10 @@ function App() {
         currentFiles.map((currentFile) =>
           currentFile.id === imageFile.id
             ? {
-                ...currentFile,
-                conversionStatus: 'converting',
-                conversionError: '',
-              }
+              ...currentFile,
+              conversionStatus: 'converting',
+              conversionError: '',
+            }
             : currentFile,
         ),
       )
@@ -136,13 +140,13 @@ function App() {
           currentFiles.map((currentFile) =>
             currentFile.id === imageFile.id
               ? {
-                  ...currentFile,
-                  conversionStatus: 'completed',
-                  convertedSize: convertedBlob.size,
-                  convertedWidth,
-                  convertedHeight,
-                  convertedUrl,
-                }
+                ...currentFile,
+                conversionStatus: 'completed',
+                convertedSize: convertedBlob.size,
+                convertedWidth,
+                convertedHeight,
+                convertedUrl,
+              }
               : currentFile,
           ),
         )
@@ -151,13 +155,13 @@ function App() {
           currentFiles.map((currentFile) =>
             currentFile.id === imageFile.id
               ? {
-                  ...currentFile,
-                  conversionStatus: 'error',
-                  conversionError:
-                    error instanceof Error
-                      ? error.message
-                      : 'Conversion failed.',
-                }
+                ...currentFile,
+                conversionStatus: 'error',
+                conversionError:
+                  error instanceof Error
+                    ? error.message
+                    : 'Conversion failed.',
+              }
               : currentFile,
           ),
         )
@@ -172,33 +176,25 @@ function App() {
       (file) => file.conversionStatus === 'completed' && file.convertedUrl,
     )
 
-    if (completedFiles.length === 0 || isCreatingZip) {
+    if (completedFiles.length === 0 || zipInProgressRef.current) {
       return
     }
+
+    zipInProgressRef.current = true
 
     try {
       setIsCreatingZip(true)
 
-      const zipBlob = await createConversionZip(completedFiles, settings.format)
+      const zipBlob = await createConversionZip(
+        completedFiles,
+        settings.format,
+      )
 
-      const downloadUrl = URL.createObjectURL(zipBlob)
-
-      const link = document.createElement('a')
-
-      link.href = downloadUrl
-
-      link.download = `imageforge-${settings.format}.zip`
-
-      document.body.appendChild(link)
-
-      link.click()
-
-      link.remove()
-
-      URL.revokeObjectURL(downloadUrl)
+      await saveFile(zipBlob, `imageforge-${settings.format}.zip`)
     } catch (error) {
-      console.error('ZIP creation failed:', error)
+      console.error('ZIP creation or download failed:', error)
     } finally {
+      zipInProgressRef.current = false
       setIsCreatingZip(false)
     }
   }
@@ -255,9 +251,8 @@ function App() {
               >
                 {isConverting
                   ? 'Converting...'
-                  : `Convert ${selectedFiles.length} ${
-                      selectedFiles.length === 1 ? 'image' : 'images'
-                    }`}
+                  : `Convert ${selectedFiles.length} ${selectedFiles.length === 1 ? 'image' : 'images'
+                  }`}
               </button>
 
               {completedCount > 0 && (
@@ -279,6 +274,8 @@ function App() {
               {duplicateCount === 1 ? 'image' : 'images'} skipped.
             </p>
           )}
+
+          <p className="app-sidebar__version">ImageForge v{__APP_VERSION__}</p>
         </aside>
 
         <section className="app-workspace">
